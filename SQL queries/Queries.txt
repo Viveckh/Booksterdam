@@ -16,6 +16,7 @@ CREATE TABLE  CustomerRecords
 	street VARCHAR(40),
 	city VARCHAR(20) NOT NULL,
 	zipCode INT NOT NULL,
+	stateName VARCHAR(2) NOT NULL,
 	country VARCHAR(40) NOT NULL,
 	phone INT NOT NULL,
 	email VARCHAR(50) NOT NULL
@@ -23,7 +24,7 @@ CREATE TABLE  CustomerRecords
 
 
 CREATE TABLE BookRecords
-	(ISBN INT UNIQUE NOT NULL,
+	(ISBN BIGINT UNIQUE NOT NULL,
 	title VARCHAR(200) NOT NULL,
 	edition FLOAT,
 	author VARCHAR(200),
@@ -36,7 +37,7 @@ CREATE TABLE BookRecords
 CREATE TABLE ShelvesRecords
 	(itemID INT IDENTITY(1000000001, 1),
 	sellerID INT FOREIGN KEY REFERENCES CustomerRecords(customerID),
-	ISBN INT,
+	ISBN BIGINT NOT NULL,
 	price FLOAT,
 	isAvailable BIT DEFAULT 1,
 	CONSTRAINT pk_ITEMID PRIMARY KEY (itemID));
@@ -54,8 +55,8 @@ CREATE TABLE OrderRecords
 -- QUERY TO INSERT A CUSTOMER INTO THE DATABASE
 -------------------------------------------------------
 
-INSERT INTO CustomerRecords (isSeller, isBuyer, lastName, middleName, firstName, street, city, zipCode, country, phone, email)
-VALUES (1, 1, 'Maharjan', NULL, 'Sujil', '505 Ramapo Valley Road', 'Mahwah', 07430, 'United States of America', 2016754068, 'smaharj1@ramapo.edu');
+INSERT INTO CustomerRecords (isSeller, isBuyer, lastName, middleName, firstName, street, city, zipCode, stateName, country, phone, email)
+VALUES (1, 1, 'Maharjan', NULL, 'Sujil', '505 Ramapo Valley Road', 'Mahwah', 07430, 'NJ', 'United States of America', 2016754068, 'smaharj1@ramapo.edu');
 
 
 -----------------------------------------------
@@ -70,6 +71,9 @@ VALUES (1627790624, 'Killing the Rising Sun: How America Vanquished World War II
 
 INSERT INTO BookRecords (ISBN, title, edition, author, publisher, numberOfPages, marketPrice) 
 VALUES (0062494600, 'Settle for More', NULL, 'Megyn Kelly', 'Harper', 352, 17.99);
+
+INSERT INTO BookRecords (ISBN, title, edition, author, publisher, numberOfPages, marketPrice) 
+VALUES (9781501141515, 'Born to Run', 1, 'Bruce Springsteen', 'Simon & Schuster', 528, 19.50);
 
 ---------------------------------------------------
 -- QUERIES TO INSERT DATA TO SHELVESRECORDS TABLE
@@ -90,4 +94,17 @@ VALUES (100000002, 1627790624, 24, 1);
 SELECT br.ISBN, br.title, br.edition, br.author, br. publisher, br.numberOfPages, sr.price FROM ShelvesRecords sr JOIN bookRecords br 
 ON (sr.ISBN = br.ISBN) AND (sr.itemID IN 
 (SELECT sr1.itemID FROM ShelvesRecords sr1 JOIN CustomerRecords cr ON (sr1.sellerID = cr.customerID)));
+
+
+-------------------------------------------------------------------------------------------------
+--ALTERING DATA TYPE OF EXISTING COLUMN. MAKE SURE IT IS BEING CONVERTED TO A BIGGER TYPE ONLY
+-------------------------------------------------------------------------------------------------
+ALTER TABLE ShelvesRecords
+ALTER COLUMN ISBN BIGINT;
+
+-----------------------------------
+--Adding constraint to a table
+-----------------------------------
+ALTER TABLE BookRecords
+ADD CONSTRAINT pk_BookID PRIMARY KEY(ISBN);
 
