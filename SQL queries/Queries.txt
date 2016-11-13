@@ -1,0 +1,93 @@
+DROP DATABASE xxxxxxx;
+
+CREATE DATABASE xxxxxxx;
+
+-----------------------------------------
+-- QUERIES TO CREATE THE SCHEMA
+-----------------------------------------
+
+CREATE TABLE  CustomerRecords
+	(customerID INT IDENTITY(100000001, 1),
+	isSeller BIT DEFAULT 1,
+	isBuyer BIT DEFAULT 1,
+	lastName VARCHAR(40) NOT NULL,
+	middleName VARCHAR(40),
+	firstName VARCHAR(40) NOT NULL,
+	street VARCHAR(40),
+	city VARCHAR(20) NOT NULL,
+	zipCode INT NOT NULL,
+	country VARCHAR(40) NOT NULL,
+	phone INT NOT NULL,
+	email VARCHAR(50) NOT NULL
+	CONSTRAINT pk_CustID PRIMARY KEY (customerID));
+
+
+CREATE TABLE BookRecords
+	(ISBN INT UNIQUE NOT NULL,
+	title VARCHAR(200) NOT NULL,
+	edition FLOAT,
+	author VARCHAR(200),
+	publisher VARCHAR(200),
+	numberOfPages INT,
+	marketPrice FLOAT,
+	CONSTRAINT pk_BookID PRIMARY KEY (ISBN));
+
+
+CREATE TABLE ShelvesRecords
+	(itemID INT IDENTITY(1000000001, 1),
+	sellerID INT FOREIGN KEY REFERENCES CustomerRecords(customerID),
+	ISBN INT,
+	price FLOAT,
+	isAvailable BIT DEFAULT 1,
+	CONSTRAINT pk_ITEMID PRIMARY KEY (itemID));
+
+
+CREATE TABLE OrderRecords
+	(orderID INT IDENTITY(1000000001, 1),
+	sellerID INT FOREIGN KEY REFERENCES CustomerRecords(customerID),
+	buyerID INT FOREIGN KEY REFERENCES CustomerRecords(customerID),
+	itemID INT FOREIGN KEY REFERENCES ShelvesRecords(itemID),
+	CONSTRAINT pk_ORDERID PRIMARY KEY (orderID));
+
+
+-------------------------------------------------------
+-- QUERY TO INSERT A CUSTOMER INTO THE DATABASE
+-------------------------------------------------------
+
+INSERT INTO CustomerRecords (isSeller, isBuyer, lastName, middleName, firstName, street, city, zipCode, country, phone, email)
+VALUES (1, 1, 'Maharjan', NULL, 'Sujil', '505 Ramapo Valley Road', 'Mahwah', 07430, 'United States of America', 2016754068, 'smaharj1@ramapo.edu');
+
+
+-----------------------------------------------
+-- QUERIES TO INSERT DATA TO BOOKRECORDS TABLE
+-----------------------------------------------
+
+INSERT INTO BookRecords (ISBN, title, edition, author, publisher, numberOfPages, marketPrice) 
+VALUES (1910561339, 'Guinness World Records 2017', NULL, 'Guinness World Records', 'Guinness World Records', 256, 21.67);
+
+INSERT INTO BookRecords (ISBN, title, edition, author, publisher, numberOfPages, marketPrice) 
+VALUES (1627790624, 'Killing the Rising Sun: How America Vanquished World War II Japan', 1, 'Bill O''Reily', 'Henry Holt and Co.', 336, 18);
+
+INSERT INTO BookRecords (ISBN, title, edition, author, publisher, numberOfPages, marketPrice) 
+VALUES (0062494600, 'Settle for More', NULL, 'Megyn Kelly', 'Harper', 352, 17.99);
+
+---------------------------------------------------
+-- QUERIES TO INSERT DATA TO SHELVESRECORDS TABLE
+---------------------------------------------------
+INSERT INTO ShelvesRecords (sellerID, ISBN, price, isAvailable)
+VALUES (100000001, 1910561339, 10, 1);
+
+INSERT INTO ShelvesRecords (sellerID, ISBN, price, isAvailable)
+VALUES (100000001, 1627790624, 19, 1);
+
+INSERT INTO ShelvesRecords (sellerID, ISBN, price, isAvailable)
+VALUES (100000002, 1627790624, 24, 1);
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+--Query that can be used in seller profile to display list of books that have been shelved by the seller (along with additional ISBN details from BookRecords)
+--Just replace the cr.customerID term at the end of query with the associated seller ID and you have the desired list of books for that seller
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+SELECT br.ISBN, br.title, br.edition, br.author, br. publisher, br.numberOfPages, sr.price FROM ShelvesRecords sr JOIN bookRecords br 
+ON (sr.ISBN = br.ISBN) AND (sr.itemID IN 
+(SELECT sr1.itemID FROM ShelvesRecords sr1 JOIN CustomerRecords cr ON (sr1.sellerID = cr.customerID)));
+

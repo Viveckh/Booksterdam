@@ -41,11 +41,13 @@ var connection = new Connection(config, function(err) {
         //Test queries making the request
         var myQuery = "Select * FROM CustomerRecords;";
         executeStatement(myQuery);
-        myQuery = "Select cr.lastName, cr.zipCode, sr.itemID FROM CustomerRecords cr JOIN ShelvesRecords sr ON cr.customerID = sr.sellerID AND sr.price < 15;"
-        executeStatement(myQuery);
+        //myQuery = "Select cr.lastName, cr.zipCode, sr.itemID FROM CustomerRecords cr JOIN ShelvesRecords sr ON cr.customerID = sr.sellerID AND sr.price < 15;"
+        //executeStatement(myQuery);
     });
 
 
+
+var resultsCollector = {};  // Object to store results and export to render in another class
 // Pass a query and it will execute the query and display the results to console
 // Testing purposes
 function executeStatement(queryStr) {
@@ -66,6 +68,15 @@ function executeStatement(queryStr) {
             //console.log(column);
             console.log(column.lastName);
             console.log(column.zipCode);
+            //COLLECTING RESULTS TO EXPORT
+            var customerInfo = {};
+            customerInfo.customerID = column.customerID;
+            customerInfo.lastName = column.lastName;
+            customerInfo.firstName = column.firstName;
+            customerInfo.zipCode = column.zipCode;
+            resultsCollector[column.customerID] =  customerInfo;
+            
+            
             if (column.itemID != null) {
                 console.log(column.itemID);
             } 
@@ -75,6 +86,10 @@ function executeStatement(queryStr) {
         
         //console.log(recordset[0].lastName);
     });
+}
+
+exports.resultsCollector = function() {
+    return resultsCollector;
 }
 
 //Closing the active global connection
