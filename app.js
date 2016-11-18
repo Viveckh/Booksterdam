@@ -6,12 +6,11 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
-var users = require('./routes/users');
+//var users = require('./routes/users');
 
 // Added by Vivek
 //var db =  require('./routes/database'); // This executes the code in database.js, so make sure it's just being used to setup communications to db
 // End of Vivek's addition
-
 
 var app = express();
 
@@ -28,7 +27,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
-app.use('/users', users);
+//app.use('/users', users);
 
 //Added by Vivek
 // Setup a listener to listen to user requests
@@ -37,7 +36,6 @@ app.listen(6552, function() {
 });
 
 // End of Vivek's addition
-
 
 
 // ERROR HANDLERS IN DEVELOPMENT AND PRODUCTION BELOW

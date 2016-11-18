@@ -24,6 +24,7 @@ var config = {
 var Connection = sql.Connection;
 //Setting up a Requester 'class'
 var Request = sql.Request;
+var request;
     
 
 // Initializing a connection
@@ -35,17 +36,22 @@ var connection = new Connection(config, function(err) {
     console.log("Connected");
 });
 
-    connection.on('connect', function() {
-        console.log("connection ON");
+connection.on('connect', function() {
+    console.log("connection ON");
+    request = new Request(connection);       // No parameters passed to Request implies a global connection will be used, but that's not working for some reason
+    
+    //Test queries making the request
+    //var myQuery = "Select * FROM CustomerRecords;";
+    //executeStatement(myQuery);
+    //myQuery = "Select cr.lastName, cr.zipCode, sr.itemID FROM CustomerRecords cr JOIN ShelvesRecords sr ON cr.customerID = sr.sellerID AND sr.price < 15;"
+    //executeStatement(myQuery);
+});
 
-        //Test queries making the request
-        var myQuery = "Select * FROM CustomerRecords;";
-        executeStatement(myQuery);
-        //myQuery = "Select cr.lastName, cr.zipCode, sr.itemID FROM CustomerRecords cr JOIN ShelvesRecords sr ON cr.customerID = sr.sellerID AND sr.price < 15;"
-        //executeStatement(myQuery);
-    });
+exports.requester = function() {
+    return request;
+}
 
-
+/*
 
 var resultsCollector = {};  // Object to store results and export to render in another class
 // Pass a query and it will execute the query and display the results to console
@@ -88,9 +94,7 @@ function executeStatement(queryStr) {
     });
 }
 
-exports.resultsCollector = function() {
-    return resultsCollector;
-}
+*/
 
 //Closing the active global connection
 //connection.close();

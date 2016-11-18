@@ -29,12 +29,13 @@ resultsCollector.zipCode = "07430";
         p #{person.lastName} #{person.zipCode}
 */
 
+/*
 var db = require('./database');
 var results = db.resultsCollector();
 console.log(results);
 
 
-/* GET users listing. */
+/* GET users listing.
 router.get('/', function(req, res, next) {
     //res.render('index', { title: 'Express' });
   //res.send('respond with a resource');
@@ -42,3 +43,4 @@ router.get('/', function(req, res, next) {
 });
 
 module.exports = router;
+*/
