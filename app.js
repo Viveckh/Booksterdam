@@ -10,6 +10,7 @@ var index = require('./routes/index');
 
 // Added by Vivek
 //var db =  require('./routes/database'); // This executes the code in database.js, so make sure it's just being used to setup communications to db
+
 // End of Vivek's addition
 
 var app = express();
@@ -34,7 +35,6 @@ app.use('/', index);
 app.listen(6552, function() {
    console.log("Listening on the given port"); 
 });
-
 // End of Vivek's addition
 
 

@@ -25,7 +25,6 @@ var Connection = sql.Connection;
 //Setting up a Requester 'class'
 var Request = sql.Request;
 var request;
-    
 
 // Initializing a connection
 var connection = new Connection(config, function(err) {
