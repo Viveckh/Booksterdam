@@ -15,5 +15,8 @@
     "mssql": "^3.3.0",
     "serve-favicon": "^2.3.0",
     "tedious": "^1.14.0"
+  },
+  "engines": {
+     "node": "6.6.0"
   }
 }
