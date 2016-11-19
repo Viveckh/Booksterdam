@@ -32,9 +32,11 @@ app.use('/', index);
 
 //Added by Vivek
 // Setup a listener to listen to user requests
+/*
 app.listen(6552, function() {
    console.log("Listening on the given port"); 
 });
+*/
 // End of Vivek's addition
 
 
