@@ -7,14 +7,15 @@ var dbRequests = require('./dbRequests');
 router.get('/', function(req, res, next) {
     
     //Proper way of executing a database request from the dbRequests.js
-    dbRequests.retrieveCustomerRecords(function (data) {
+    dbRequests.retrieveCustomerRecords(function (customers) {
         //Do stuffs with the retrieved data here
-        console.log(data);
-        console.log(data['100000001'].firstName);
-        console.log("here");
+        console.log(customers);
+        //console.log(data['100000001'].firstName);
+        dbRequests.retrieveShelvesRecords(function (items) {
+            console.log(items);
+            res.render('index', { customers: customers, items : items });
+        });
     });
-    
-    res.render('index', { title: 'Expressed' });
 });
 
 module.exports = router;

@@ -1,5 +1,39 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  h1 Seller List...
+  p
+  table#table_Customers
+        tr
+            th Customer ID
+            th Name
+            th Address
+            th Phone
+            th Email
+        each person in customers
+            tr
+                td #{person.customerID}
+                td #{person.firstName} #{person.middleName} #{person.lastName}
+                td 
+                  | #{person.street}
+                  br
+                  | #{person.city}, #{person.stateName} #{person.zipCode}
+                  br
+                  | #{person.country}
+                td #{person.phone}
+                td #{person.email}
+  
+  h1 Shelves items...
+  p
+  table#table_shelves
+        tr
+            th Item ID
+            th Seller ID
+            th ISBN
+            th price
+        each item in items
+            tr
+                td #{item.itemID}
+                td #{item.sellerID}
+                td #{item.isbn}
+                td #{item.price}
