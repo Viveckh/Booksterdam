@@ -60,6 +60,7 @@ var dbRequester = module.exports = {
                     var itemInfo = {};
                     itemInfo.itemID = column.itemID;
                     itemInfo.sellerID = column.sellerID;
+                    itemInfo.schoolID = column.schoolID;
                     itemInfo.isbn = column.ISBN;
                     itemInfo.price = (column.price == null) ? "" : column.price;
                     items[column.itemID] =  itemInfo;

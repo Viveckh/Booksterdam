@@ -23,6 +23,16 @@ CREATE TABLE  CustomerRecords
 	CONSTRAINT pk_CustID PRIMARY KEY (customerID));
 
 
+CREATE TABLE SchoolRecords
+	(schoolID INT IDENTITY(5000, 1),
+	schoolName VARCHAR(200) NOT NULL,
+	city VARCHAR(20) NOT NULL,
+	zipCode INT NOT NULL,
+	stateName VARCHAR(2) NOT NULL,
+	country VARCHAR(40) NOT NULL
+	CONSTRAINT pk_SchoolID PRIMARY KEY (schoolID));
+
+
 CREATE TABLE BookRecords
 	(ISBN BIGINT UNIQUE NOT NULL,
 	title VARCHAR(200) NOT NULL,
@@ -37,6 +47,7 @@ CREATE TABLE BookRecords
 CREATE TABLE ShelvesRecords
 	(itemID INT IDENTITY(1000000001, 1),
 	sellerID INT FOREIGN KEY REFERENCES CustomerRecords(customerID),
+	schoolID INT FOREIGN KEY REFERENCES SchoolRecords(schoolID) NOT NULL,
 	ISBN BIGINT NOT NULL,
 	price FLOAT,
 	isAvailable BIT DEFAULT 1,
@@ -57,6 +68,14 @@ CREATE TABLE OrderRecords
 
 INSERT INTO CustomerRecords (isSeller, isBuyer, lastName, middleName, firstName, street, city, zipCode, stateName, country, phone, email)
 VALUES (1, 1, 'Maharjan', NULL, 'Sujil', '505 Ramapo Valley Road', 'Mahwah', 07430, 'NJ', 'United States of America', 2016754068, 'smaharj1@ramapo.edu');
+
+
+------------------------------------------------------
+-- QUERY TO INSERT A SCHOOL INTO SCHOOLRECORDS TABLE
+------------------------------------------------------
+
+INSERT INTO SchoolRecords(schoolName, city, zipCode, stateName, country)
+VALUES ('Ramapo College of New Jersey', 'Mahwah', 07430, 'NJ', 'United States of America');
 
 
 -----------------------------------------------
@@ -108,3 +127,16 @@ ALTER COLUMN ISBN BIGINT;
 ALTER TABLE BookRecords
 ADD CONSTRAINT pk_BookID PRIMARY KEY(ISBN);
 
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+-- Queries to add a Foreign key column to a table, update column to a default for existing records and make that column NOT NULL for future
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+ALTER TABLE ShelvesRecords
+ADD schoolID INT FOREIGN KEY REFERENCES SchoolRecords(schoolID);
+
+UPDATE ShelvesRecords
+SET schoolID=5000;
+
+ALTER TABLE ShelvesRecords
+ALTER COLUMN schoolID INT NOT NULL;
