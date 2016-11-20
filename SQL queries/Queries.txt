@@ -19,7 +19,7 @@ CREATE TABLE  CustomerRecords
 	stateName VARCHAR(2) NOT NULL,
 	country VARCHAR(40) NOT NULL,
 	phone INT NOT NULL,
-	email VARCHAR(50) NOT NULL
+	email VARCHAR(50) NOT NULL,
 	CONSTRAINT pk_CustID PRIMARY KEY (customerID));
 
 
@@ -29,7 +29,7 @@ CREATE TABLE SchoolRecords
 	city VARCHAR(20) NOT NULL,
 	zipCode INT NOT NULL,
 	stateName VARCHAR(2) NOT NULL,
-	country VARCHAR(40) NOT NULL
+	country VARCHAR(40) NOT NULL,
 	CONSTRAINT pk_SchoolID PRIMARY KEY (schoolID));
 
 
@@ -40,6 +40,7 @@ CREATE TABLE BookRecords
 	author VARCHAR(200),
 	publisher VARCHAR(200),
 	numberOfPages INT,
+	imageURL VARCHAR(500),
 	marketPrice FLOAT,
 	CONSTRAINT pk_BookID PRIMARY KEY (ISBN));
 

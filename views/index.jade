@@ -36,16 +36,19 @@ block content
                 .row
             - }            
                 // Add the item
-                .col-md-4
-                    | Item ID: #{item.itemID}
-                    br
-                    | School ID: #{item.schoolID}
-                    br
-                    | Seller ID: #{item.sellerID}
-                    br
-                    | ISBN: #{item.isbn}
-                    br
-                    | Price: $#{item.price}
+                .col-sm-6.col-md-4
+                    .thumbnail
+                        img.img-responsive.img-rounded.custom_thumbnail_image(src='https://images-na.ssl-images-amazon.com/images/I/51x-38avp4L.jpg', alt='...')
+                        .caption
+                            | Item ID: #{item.itemID}
+                            br
+                            | School ID: #{item.schoolID}
+                            br
+                            | Seller ID: #{item.sellerID}
+                            br
+                            | ISBN: #{item.isbn}
+                            br
+                            | Price: $#{item.price}
             // Increase count to keep track of number of items in the row    
             - count++;
             //Resetting counter to move to the next row
@@ -83,12 +86,19 @@ block content
             - }
         .row
         hr
-  
-    
+
+        footer
+            p.pull-right
+                a(href='http://www.viveckh.com') Developed by Viveckh
+            p
+                | © 2016 Booksterdam, Inc. · 
+                a(href='#') Privacy 
+                | · 
+                a(href='#') Terms
 
         h1 Seller List...
         p
-        table#table_Customers
+        table.table.table-striped.table-hover
                 tr
                     th Customer ID
                     th Name
@@ -110,7 +120,7 @@ block content
         
         h1 Shelves items...
         p
-        table#table_shelves
+        table.table.table-striped.table-hover
                 tr
                     th Item ID
                     th Seller ID
