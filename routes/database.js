@@ -1,9 +1,8 @@
 
 /*
-    Server Side Database Requests Handler
+    Server Side Database Connection is established here.
     Author: Vivek Pandey
 */
-
 
 //Including all the required drivers and packages
 var sql = require("mssql");
@@ -38,62 +37,8 @@ var connection = new Connection(config, function(err) {
 connection.on('connect', function() {
     console.log("connection ON");
     request = new Request(connection);       // No parameters passed to Request implies a global connection will be used, but that's not working for some reason
-    
-    //Test queries making the request
-    //var myQuery = "Select * FROM CustomerRecords;";
-    //executeStatement(myQuery);
-    //myQuery = "Select cr.lastName, cr.zipCode, sr.itemID FROM CustomerRecords cr JOIN ShelvesRecords sr ON cr.customerID = sr.sellerID AND sr.price < 15;"
-    //executeStatement(myQuery);
 });
 
 exports.requester = function() {
     return request;
 }
-
-/*
-
-var resultsCollector = {};  // Object to store results and export to render in another class
-// Pass a query and it will execute the query and display the results to console
-// Testing purposes
-function executeStatement(queryStr) {
-    var request = new Request(connection);       // No parameters passed to Request implies a global connection will be used, but that's not working for some reason
-    
-    request.query(queryStr, function(err, recordset) {
-        console.log("inside query request");
-        
-        // If any error occurs during the request, display the error log and return;
-        if (err) {
-            console.log("couldn't fetch the request. Error log below");
-            console.log(err);
-            return;
-        }
-        
-        // If no errors, then, display the fetched data
-        recordset.forEach(function(column) {
-            //console.log(column);
-            console.log(column.lastName);
-            console.log(column.zipCode);
-            //COLLECTING RESULTS TO EXPORT
-            var customerInfo = {};
-            customerInfo.customerID = column.customerID;
-            customerInfo.lastName = column.lastName;
-            customerInfo.firstName = column.firstName;
-            customerInfo.zipCode = column.zipCode;
-            resultsCollector[column.customerID] =  customerInfo;
-            
-            
-            if (column.itemID != null) {
-                console.log(column.itemID);
-            } 
-            console.log();
-        });
-        console.log("request Fulfilled");
-        
-        //console.log(recordset[0].lastName);
-    });
-}
-
-*/
-
-//Closing the active global connection
-//connection.close();

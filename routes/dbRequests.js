@@ -60,7 +60,7 @@ var dbRequester = module.exports = {
                     var itemInfo = {};
                     itemInfo.itemID = column.itemID;
                     itemInfo.sellerID = column.sellerID;
-                    itemInfo.isbn = column.isbn;
+                    itemInfo.isbn = column.ISBN;
                     itemInfo.price = (column.price == null) ? "" : column.price;
                     items[column.itemID] =  itemInfo;
                 });
@@ -69,6 +69,5 @@ var dbRequester = module.exports = {
                 //Calling the callback function here with the returned data after the request is successful
                 callback(items);
             });
-
     }
 }

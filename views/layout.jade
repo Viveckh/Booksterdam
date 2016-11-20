@@ -1,8 +1,30 @@
 doctype html
 html
   head
-    title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    // The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags
+    
+    meta(name='description', content='Find used books on campus')
+    meta(name='author', content='Vivek Pandey')
+    link(rel='icon', href='')
+    title Booksterdam
+
+    // BOOTSTRAP INCLUSIONS
+    // Latest compiled and minified CSS
+    link(rel='stylesheet', href='/bootstrap-3.3.7-dist/css/bootstrap.min.css')
+    // Optional theme
+    link(rel='stylesheet', href='/bootstrap-3.3.7-dist/css/bootstrap-theme.min.css')
+
+    // IE10 viewport hack for Surface/desktop Windows 8 bug
+    link(href='/stylesheets/ie10-viewport-bug-workaround.css', rel='stylesheet')
+    script(src='/javascripts/ie-emulation-modes-warning.js')
+
+
+    // CUSTOMIZED STYLESHEETS
+    link(rel='stylesheet', href='/stylesheets/grid.css')
+    //link(rel='stylesheet', href='/stylesheets/style.css')
     link(rel='stylesheet', href='/stylesheets/basicCustomizations.css')
   body
     block content

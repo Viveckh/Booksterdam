@@ -1,39 +1,83 @@
 extends layout
 
 block content
-  h1 Seller List...
-  p
-  table#table_Customers
-        tr
-            th Customer ID
-            th Name
-            th Address
-            th Phone
-            th Email
-        each person in customers
-            tr
-                td #{person.customerID}
-                td #{person.firstName} #{person.middleName} #{person.lastName}
-                td 
-                  | #{person.street}
-                  br
-                  | #{person.city}, #{person.stateName} #{person.zipCode}
-                  br
-                  | #{person.country}
-                td #{person.phone}
-                td #{person.email}
-  
-  h1 Shelves items...
-  p
-  table#table_shelves
-        tr
-            th Item ID
-            th Seller ID
-            th ISBN
-            th price
+    .container
+        .page-header
+            h1 Displaying Shelves
+            p.lead These are the books that are currently available
+
+        h3 At Ramapo College
+        p You go to Po'? See if there is something you would like.
+        
+        - var count = 0;
         each item in items
-            tr
-                td #{item.itemID}
-                td #{item.sellerID}
-                td #{item.isbn}
-                td #{item.price}
+            // If it is the first element in the row, then create a new row
+            - if (count == 0) {
+                .row
+            - }            
+                // Add the item
+                .col-md-4
+                    | Item ID: #{item.itemID}
+                    br
+                    | Seller ID: #{item.sellerID}
+                    br
+                    | ISBN: #{item.isbn}
+                    br
+                    | Price: $#{item.price}
+            // Increase count to keep track of number of items in the row    
+            - count++;
+            //Resetting counter to move to the next row
+            - if (count == 3) {
+                - count = 0;
+            - }
+        .row
+        hr
+  
+    
+
+        h1 Seller List...
+        p
+        table#table_Customers
+                tr
+                    th Customer ID
+                    th Name
+                    th Address
+                    th Phone
+                    th Email
+                each person in customers
+                    tr
+                        td #{person.customerID}
+                        td #{person.firstName} #{person.middleName} #{person.lastName}
+                        td 
+                            | #{person.street}
+                            br
+                            | #{person.city}, #{person.stateName} #{person.zipCode}
+                            br
+                            | #{person.country}
+                        td #{person.phone}
+                        td #{person.email}
+        
+        h1 Shelves items...
+        p
+        table#table_shelves
+                tr
+                    th Item ID
+                    th Seller ID
+                    th ISBN
+                    th price
+                each item in items
+                    tr
+                        td #{item.itemID}
+                        td #{item.sellerID}
+                        td #{item.isbn}
+                        td #{item.price}
+
+//Include jQuery for supporting Bootstrap's features
+script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js')
+// Latest compiled and minified JavaScript
+script(src='/bootstrap-3.3.7-dist/js/bootstrap.min.js')
+
+// IE10 viewport hack for Surface/desktop Windows 8 bug
+script(src='/javascripts/ie10-viewport-bug-workaround.js')
+
+    
