@@ -98,14 +98,14 @@ VALUES (9781501141515, 'Born to Run', 1, 'Bruce Springsteen', 'Simon & Schuster'
 ---------------------------------------------------
 -- QUERIES TO INSERT DATA TO SHELVESRECORDS TABLE
 ---------------------------------------------------
-INSERT INTO ShelvesRecords (sellerID, ISBN, price, isAvailable)
-VALUES (100000001, 1910561339, 10, 1);
+INSERT INTO ShelvesRecords (sellerID, schoolID, ISBN, price, isAvailable)
+VALUES (100000001, 5000, 1910561339, 10, 1);
 
-INSERT INTO ShelvesRecords (sellerID, ISBN, price, isAvailable)
-VALUES (100000001, 1627790624, 19, 1);
+INSERT INTO ShelvesRecords (sellerID, schoolID, ISBN, price, isAvailable)
+VALUES (100000001, 5000, 1627790624, 19, 1);
 
-INSERT INTO ShelvesRecords (sellerID, ISBN, price, isAvailable)
-VALUES (100000002, 1627790624, 24, 1);
+INSERT INTO ShelvesRecords (sellerID, schoolID, ISBN, price, isAvailable)
+VALUES (100000002, 5000, 1627790624, 24, 1);
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 --Query that can be used in seller profile to display list of books that have been shelved by the seller (along with additional ISBN details from BookRecords)
@@ -141,3 +141,26 @@ SET schoolID=5000;
 
 ALTER TABLE ShelvesRecords
 ALTER COLUMN schoolID INT NOT NULL;
+
+
+--------------------------------------------------------------------------
+--QUERY TO GET ALL THE NECESSARY INFORMATION TO DISPLAY ON THE THUMBNAIL
+--------------------------------------------------------------------------
+
+SELECT sr.itemID AS itemID, br.ISBN AS ISBN, br.title AS title, br.edition AS edition, br.author AS author, br.publisher AS publisher, br.marketPrice AS marketPrice, br.imageURL AS imageURL, scr.schoolName as schoolName, cr.lastName AS sellerLastName, cr.middleName AS sellerMiddleName, cr.firstName AS sellerFirstName, sr.price AS listedPrice
+FROM ShelvesRecords sr 
+JOIN CustomerRecords cr 
+ON (sr.sellerID = cr.customerID)
+JOIN BookRecords br
+ON (sr.ISBN = br.ISBN)
+JOIN SchoolRecords scr 
+ON (sr.schoolID = scr.schoolID);
+
+----------------------------------------------------------------
+--QUERIES TO GET ALL THE AVAILABLE INFORMATION ON A LISTED ITEM
+----------------------------------------------------------------
+
+SELECT * FROM ShelvesRecords sr1 JOIN CustomerRecords cr ON (sr1.sellerID = cr.customerID);
+SELECT * FROM ShelvesRecords sr2 JOIN BookRecords br ON (sr2.ISBN = br.ISBN);
+SELECT * FROM ShelvesRecords sr3 JOIN SchoolRecords scr ON (sr3.schoolID = scr.schoolID);
+

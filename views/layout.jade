@@ -27,5 +27,13 @@ html
     link(rel='stylesheet', href='/stylesheets/grid.css')
     //link(rel='stylesheet', href='/stylesheets/style.css')
     link(rel='stylesheet', href='/stylesheets/basicCustomizations.css')
+
+    //Include jQuery for supporting Bootstrap's features
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js')
+    //matchHeight plugin to produce even sized columns
+    script(src='//cdnjs.cloudflare.com/ajax/libs/jquery.matchHeight/0.7.0/jquery.matchHeight-min.js')
+
+    //CUSTOMIZED JAVASCRIPTS
+    script(src='/javascripts/viewManager.js')
   body
     block content

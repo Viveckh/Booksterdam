@@ -33,22 +33,43 @@ block content
         each item in items
             // If it is the first element in the row, then create a new row
             - if (count == 0) {
-                .row
+                //.row  //Temporarily commented because in tablets, three in a row makes one overflow
             - }            
-                // Add the item
+                // Add the item           
                 .col-sm-6.col-md-4
                     .thumbnail
-                        img.img-responsive.img-rounded.custom_thumbnail_image(src='https://images-na.ssl-images-amazon.com/images/I/51x-38avp4L.jpg', alt='...')
+                        img.img-responsive.img-rounded.custom_thumbnail_image(src=item.imageURL, alt='...')
                         .caption
-                            | Item ID: #{item.itemID}
+                            b Item ID: 
+                            | #{item.itemID}
                             br
-                            | School ID: #{item.schoolID}
+                            b Title: 
+                            | #{item.title}
                             br
-                            | Seller ID: #{item.sellerID}
+                            b Author: 
+                            | #{item.author}
                             br
-                            | ISBN: #{item.isbn}
+                            b Edition: 
+                            | #{item.edition}
                             br
-                            | Price: $#{item.price}
+                            b Publisher: 
+                            | #{item.publisher}
+                            br
+                            b ISBN: 
+                            | #{item.isbn}
+                            br
+                            b Market Price: 
+                            | $#{item.marketPrice}
+                            br
+                            br
+                            b Available at: 
+                            | #{item.schoolName}
+                            br
+                            b Seller: 
+                            | #{item.sellerFirstName} #{item.sellerMiddleName} #{item.sellerLastName} 
+                            br
+                            b Listed price: 
+                            | $#{item.listedPrice}
             // Increase count to keep track of number of items in the row    
             - count++;
             //Resetting counter to move to the next row
@@ -58,45 +79,7 @@ block content
         .row
         hr
 
-        h3 Rutgers University
-        p Y'all got a HUGEEEEEE population, Folks. - Donald J. Trump
-        
-        - var count = 0;
-        each item in items
-            // If it is the first element in the row, then create a new row
-            - if (count == 0) {
-                .row
-            - }            
-                // Add the item
-                .col-md-4
-                    | Item ID: #{item.itemID}
-                    br
-                    | School ID: #{item.schoolID}
-                    br
-                    | Seller ID: #{item.sellerID}
-                    br
-                    | ISBN: #{item.isbn}
-                    br
-                    | Price: $#{item.price}
-            // Increase count to keep track of number of items in the row    
-            - count++;
-            //Resetting counter to move to the next row
-            - if (count == 3) {
-                - count = 0;
-            - }
-        .row
-        hr
-
-        footer
-            p.pull-right
-                a(href='http://www.viveckh.com') Developed by Viveckh
-            p
-                | © 2016 Booksterdam, Inc. · 
-                a(href='#') Privacy 
-                | · 
-                a(href='#') Terms
-
-        h1 Seller List...
+        h3 Customers
         p
         table.table.table-striped.table-hover
                 tr
@@ -117,28 +100,19 @@ block content
                             | #{person.country}
                         td #{person.phone}
                         td #{person.email}
-        
-        h1 Shelves items...
-        p
-        table.table.table-striped.table-hover
-                tr
-                    th Item ID
-                    th Seller ID
-                    th ISBN
-                    th price
-                each item in items
-                    tr
-                        td #{item.itemID}
-                        td #{item.sellerID}
-                        td #{item.isbn}
-                        td #{item.price}
 
-//Include jQuery for supporting Bootstrap's features
-script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js')
+        // Website Footer
+        footer
+            p.pull-right
+                a(href='http://www.viveckh.com') Developed by Viveckh
+            p
+                | © 2016 Booksterdam, Inc. · 
+                a(href='#') Privacy 
+                | · 
+                a(href='#') Terms
 // Latest compiled and minified JavaScript
 script(src='/bootstrap-3.3.7-dist/js/bootstrap.min.js')
 
 // IE10 viewport hack for Surface/desktop Windows 8 bug
 script(src='/javascripts/ie10-viewport-bug-workaround.js')
 
-    
