@@ -1,7 +1,7 @@
 extends layout
 
 block content
-    nav.navbar.navbar-inverse.navbar-fixed-top
+    nav.navbar.navbar-inverse.navbar-fixed-top#custom-navBar
         .container
             .navbar-header
                 button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#navbar', aria-expanded='false', aria-controls='navbar')
@@ -17,14 +17,18 @@ block content
                     .form-group
                         input.form-control(type='password', placeholder='Password')
                     button.btn.btn-success(type='submit') Sign in
-        // /.navbar-collapse
+                // /.navbar-collapse
 
 
-
-    .container
+    .container   
         .page-header
-            h1 Seems like we have a visitor, FINALLY!
-            p.lead We're currently under construction, just like Trump's Executive Board.
+            .form-group.has-feedback.custom-searchBar
+                input.form-control#custom-searchBarText(type='text', maxlength='128', placeholder='Search using Book title, ISBN, author, etc')
+                span.icon.glyphicon.glyphicon-search.form-control-feedback#custom-searchBarIcon
+        
+        h1 Seems like we have a visitor, FINALLY!
+        p.lead We're currently under construction, just like Trump's Executive Board.
+        hr
 
         h3 Ramapo College
         p Whaaazzzaap RoadRunner? See if we've got a book for you lurking around the arch.
@@ -36,7 +40,7 @@ block content
                 //.row  //Temporarily commented because in tablets, three in a row makes one overflow
             - }            
                 // Add the item           
-                .col-sm-6.col-md-4
+                .col-sm-6.col-md-4#custom-itemGrid
                     .thumbnail
                         img.img-responsive.img-rounded.custom_thumbnail_image(src=item.imageURL, alt='...')
                         .caption
@@ -68,8 +72,8 @@ block content
                             b Seller: 
                             | #{item.sellerFirstName} #{item.sellerMiddleName} #{item.sellerLastName} 
                             br
-                            b Listed price: 
-                            | $#{item.listedPrice}
+                            br
+                            button.btn.btn-default.showDetailsButton Buy for $#{item.listedPrice}
             // Increase count to keep track of number of items in the row    
             - count++;
             //Resetting counter to move to the next row
@@ -100,7 +104,7 @@ block content
                             | #{person.country}
                         td #{person.phone}
                         td #{person.email}
-
+        
         // Website Footer
         footer
             p.pull-right

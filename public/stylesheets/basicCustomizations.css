@@ -1,3 +1,45 @@
+#custom-navBar {
+    background-color: #2B2B2B;
+}
+
+/*To compensate for the extra padding done in jumbotron.css*/
+body {
+    padding-top: 20px;
+    font-family: 'Quantico', sans-serif;
+}
+
+/* Search bar modifcations in this section*/
+.page-header {
+    background-color: #FDF3E7;
+}
+
+.custom-searchBar {
+    width: 60%;
+    margin: 0 auto; /* Center the searchbar*/
+}
+
+#custom-searchBarText, #custom-searchBarIcon {
+    height: 3em;
+}
+
+.glyphicon-search {
+    background-color: red;
+}
+
+/* Book listing view - grids, thumbnails, captions, etc*/
+#custom-itemGrid {
+    border: 1px;
+    background-color: #FDF3E7;
+}
+
+.thumbnail {
+    background-color: #ECECEA;
+}
+
 .thumbnail img {
     height: 15em;
+}
+
+footer {
+    background-color: #ECECEA;
 }
