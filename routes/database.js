@@ -1,4 +1,3 @@
-
 /*
     Server Side Database Connection is established here.
     Author: Vivek Pandey
@@ -21,13 +20,11 @@ var config = {
 // Setting up the 'classes' that will be used.
 //In object oriented terms, Connection is like the class, and connection is the instance of it
 var Connection = sql.Connection;
-//Setting up a Requester 'class'
-var Request = sql.Request;
-var request;
+var connection;
 
 function replaceConnectionOnDisconnect() {
     // Initializing a connection
-    var connection = new Connection(config, function(err) {
+    connection = new Connection(config, function(err) {
         if (err) {
             console.log(err);
             return;
@@ -37,7 +34,6 @@ function replaceConnectionOnDisconnect() {
 
     connection.on('connect', function() {
         console.log("connection ON");
-        request = new Request(connection);       // No parameters passed to Request implies a global connection will be used, but that's not working for some reason
     });
 
     // TESTING: Added this error handler and the function wrapper of 'replaceConnectionOnDisconnect' to see if connection is re-established on error
@@ -50,6 +46,6 @@ function replaceConnectionOnDisconnect() {
 
 replaceConnectionOnDisconnect();
 
-exports.requester = function() {
-    return request;
+exports.connectionPool = function() {
+    return connection;
 }

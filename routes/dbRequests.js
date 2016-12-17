@@ -1,10 +1,16 @@
+var sql = require("mssql");
 var database = require('./database');
+
+var Request = sql.Request;
+var connection = database.connectionPool(); //Import established connection from database.js
 
 var dbRequester = module.exports = {
     //Retrieves the entire customer Records; user can overload the callback function if there is anything they want done with the returned data
     retrieveCustomerRecords: function (callback) {
         var customers = {};
-        database.requester().query("Select * FROM CustomerRecords", function(err, recordset) {
+        
+        request = new Request(connection);
+        request.query("Select * FROM CustomerRecords", function(err, recordset) {
                 console.log("Inside Query Request");
 
                 // If any error occurs during the request, display the error log and return;
@@ -45,7 +51,9 @@ var dbRequester = module.exports = {
     //Retrieves the content from the ShelvesRecords Table
     retrieveShelvesRecords: function (callback) {
         var items = {};
-        database.requester().query("Select * FROM ShelvesRecords WHERE isAvailable = 1", function(err, recordset) {
+
+        request = new Request(connection);
+        request.query("Select * FROM ShelvesRecords WHERE isAvailable = 1", function(err, recordset) {
                 console.log("Inside Query Request");
 
                 // If any error occurs during the request, display the error log and return;
@@ -76,8 +84,11 @@ var dbRequester = module.exports = {
     //Gets all the items on the shelves with their necessary info to display on the thumbnail
     getItemsInfoForThumbnail: function (callback) {
         var items = {};
+        
         var queryForRequest = "SELECT sr.itemID AS itemID, br.ISBN AS ISBN, br.title AS title, br.edition AS edition, br.author AS author, br.publisher AS publisher, br.marketPrice AS marketPrice, br.imageURL AS imageURL, scr.schoolName AS schoolName, cr.lastName AS sellerLastName, cr.middleName AS sellerMiddleName, cr.firstName AS sellerFirstName, sr.price AS listedPrice FROM ShelvesRecords sr JOIN CustomerRecords cr ON (sr.sellerID = cr.customerID) JOIN BookRecords br ON (sr.ISBN = br.ISBN) JOIN SchoolRecords scr ON (sr.schoolID = scr.schoolID);"
-        database.requester().query(queryForRequest, function(err, recordset) {
+        
+        request = new Request(connection);
+        request.query(queryForRequest, function(err, recordset) {
                 console.log("Inside Query Request");
 
                 // If any error occurs during the request, display the error log and return;
