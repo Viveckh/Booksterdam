@@ -1,0 +1,12 @@
+-------------------------------------------------------------------------------------------------------------------------------
+-- SEARCHES THE SHELVES USING THE GIVEN SEARCH STRING TO FIND ANY FULL/PARTIAL MATCH IN ISBN, TITLE, AUTHOR, PUBLISHER, SCHOOL 
+-------------------------------------------------------------------------------------------------------------------------------
+
+DECLARE @find varchar(50) = '%BrUcE%';
+
+SELECT sr.itemID AS itemID, br.ISBN AS ISBN, br.title AS title, br.edition AS edition, br.author AS author, br.publisher AS publisher, br.marketPrice AS marketPrice, br.imageURL AS imageURL, scr.schoolName AS schoolName, cr.lastName AS sellerLastName, cr.middleName AS sellerMiddleName, cr.firstName AS sellerFirstName, sr.price AS listedPrice
+FROM ShelvesRecords sr 
+JOIN CustomerRecords cr ON (sr.sellerID = cr.customerID) 
+JOIN BookRecords br ON (sr.ISBN = br.ISBN)
+JOIN SchoolRecords scr ON (sr.schoolID = scr.schoolID)
+WHERE (br.ISBN LIKE @find) OR (br.title LIKE @find) OR (br.author LIKE @find) OR (br.publisher LIKE @find) OR (scr.schoolName LIKE @find);

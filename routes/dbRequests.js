@@ -81,13 +81,17 @@ var dbRequester = module.exports = {
             });
     },
 
-    //Gets all the items on the shelves with their necessary info to display on the thumbnail
-    getItemsInfoForThumbnail: function (callback) {
+    //Searches the DB for occurence of a string to find potential matches in ISBN, title, author, publisher and school.
+    //Then gets matching items from the shelves with their necessary info to display on the thumbnail
+    getMatchingItemsInfoForThumbnail: function (strToFind, callback) {
         var items = {};
         
-        var queryForRequest = "SELECT sr.itemID AS itemID, br.ISBN AS ISBN, br.title AS title, br.edition AS edition, br.author AS author, br.publisher AS publisher, br.marketPrice AS marketPrice, br.imageURL AS imageURL, scr.schoolName AS schoolName, cr.lastName AS sellerLastName, cr.middleName AS sellerMiddleName, cr.firstName AS sellerFirstName, sr.price AS listedPrice FROM ShelvesRecords sr JOIN CustomerRecords cr ON (sr.sellerID = cr.customerID) JOIN BookRecords br ON (sr.ISBN = br.ISBN) JOIN SchoolRecords scr ON (sr.schoolID = scr.schoolID);"
-        
+        //Parameterizing input to prevent from SQL injection
         request = new Request(connection);
+        request.input('find', sql.VarChar, '%' + strToFind + '%');  //'find' is the parameter name, sql.VarChar is to tell that the input is going to be in var format, and the third parameter is the string to search with wildcards appended
+
+        var queryForRequest = "SELECT sr.itemID AS itemID, br.ISBN AS ISBN, br.title AS title, br.edition AS edition, br.author AS author, br.publisher AS publisher, br.marketPrice AS marketPrice, br.imageURL AS imageURL, scr.schoolName AS schoolName, cr.lastName AS sellerLastName, cr.middleName AS sellerMiddleName, cr.firstName AS sellerFirstName, sr.price AS listedPrice FROM ShelvesRecords sr JOIN CustomerRecords cr ON (sr.sellerID = cr.customerID) JOIN BookRecords br ON (sr.ISBN = br.ISBN) JOIN SchoolRecords scr ON (sr.schoolID = scr.schoolID) WHERE (br.ISBN LIKE @find) OR (br.title LIKE @find) OR (br.author LIKE @find) OR (br.publisher LIKE @find) OR (scr.schoolName LIKE @find);"
+        
         request.query(queryForRequest, function(err, recordset) {
                 console.log("Inside Query Request");
 

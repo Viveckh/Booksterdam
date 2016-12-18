@@ -11,7 +11,7 @@ router.get('/', function(req, res, next) {
         //Do stuffs with the retrieved data here
         //console.log(customers);
         //console.log(data['100000001'].firstName);
-        dbRequests.getItemsInfoForThumbnail(function (items) {
+        dbRequests.getMatchingItemsInfoForThumbnail('', function (items) { //Search for an empty string so that all the available books can be seen
             console.log(items);
             res.render('index', { customers: customers, items : items });
         });
