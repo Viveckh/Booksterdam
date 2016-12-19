@@ -15,7 +15,7 @@ $(document).keypress(function(e) {
 });
 */
 
-//Retrieve the books that match when the user presses enter on search bar
+//Retrieve the books that match when the user presses enter on search bar..
 $(document).ready(function() {
     $("#custom-searchBarText").keypress(function(e){
         //If user presses the Enter Key
