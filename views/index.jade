@@ -29,81 +29,14 @@ block content
         h1 Seems like we have a visitor, FINALLY!
         p.lead We're currently under construction, just like Trump's Executive Board.
         hr
-
-        h3 Ramapo College
-        p Whaaazzzaap RoadRunner? See if we've got a book for you lurking around the arch.
         
-        - var count = 0;
-        each item in items
-            // If it is the first element in the row, then create a new row
-            - if (count == 0) {
-                //.row  //Temporarily commented because in tablets, three in a row makes one overflow
-            - }            
-                // Add the item           
-                .col-sm-6.col-md-4#custom-itemGrid
-                    .thumbnail
-                        img.img-responsive.img-rounded.custom_thumbnail_image(src=item.imageURL, alt='...')
-                        .caption
-                            b Item ID: 
-                            | #{item.itemID}
-                            br
-                            b Title: 
-                            | #{item.title}
-                            br
-                            b Author: 
-                            | #{item.author}
-                            br
-                            b Edition: 
-                            | #{item.edition}
-                            br
-                            b Publisher: 
-                            | #{item.publisher}
-                            br
-                            b ISBN: 
-                            | #{item.isbn}
-                            br
-                            b Market Price: 
-                            | $#{item.marketPrice}
-                            br
-                            br
-                            b Available at: 
-                            | #{item.schoolName}
-                            br
-                            b Seller: 
-                            | #{item.sellerFirstName} #{item.sellerMiddleName} #{item.sellerLastName} 
-                            br
-                            br
-                            button.btn.btn-default.showDetailsButton Buy for $#{item.listedPrice}
-            // Increase count to keep track of number of items in the row    
-            - count++;
-            //Resetting counter to move to the next row
-            - if (count == 3) {
-                - count = 0;
-            - }
-        .row
-        hr
+        // Listing the items available in the shelves here
+        .section#custom-shelves
+            include shelves
 
-        h3 Customers
-        p
-        table.table.table-striped.table-hover
-                tr
-                    th Customer ID
-                    th Name
-                    th Address
-                    th Phone
-                    th Email
-                each person in customers
-                    tr
-                        td #{person.customerID}
-                        td #{person.firstName} #{person.middleName} #{person.lastName}
-                        td 
-                            | #{person.street}
-                            br
-                            | #{person.city}, #{person.stateName} #{person.zipCode}
-                            br
-                            | #{person.country}
-                        td #{person.phone}
-                        td #{person.email}
+        // Displaying customers Listing
+        //.section#custom-customers
+            include users
         
         // Website Footer
         footer

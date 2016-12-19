@@ -1,17 +1,24 @@
-extends layout
+//Expects a 'customers' object with the info about customers
 
-block content
-    h1  Retrieving CustomerRecords...
-    h3  These sellers were found in the Booksterdam database
-    table#table_Customers
+h3 Customers
+p
+
+table.table.table-striped.table-hover
+    tr
+        th Customer ID
+        th Name
+        th Address
+        th Phone
+        th Email
+    each person in customers
         tr
-            th RecordID
-            th Last Name
-            th First Name
-            th Zip Code
-        each person in info
-            tr
-                td #{person.customerID}
-                td #{person.lastName}
-                td #{person.firstName}
-                td #{person.zipCode}
+            td #{person.customerID}
+            td #{person.firstName} #{person.middleName} #{person.lastName}
+            td 
+                | #{person.street}
+                br
+                | #{person.city}, #{person.stateName} #{person.zipCode}
+                br
+                | #{person.country}
+            td #{person.phone}
+            td #{person.email}

@@ -1,0 +1,54 @@
+//Expects 'items' object containing items to be displayed in the thumbnails
+
+h3 Ramapo College
+p Whaaazzzaap RoadRunner? See if we've got a book for you lurking around the arch.
+        
+- var count = 0;
+each item in items
+    // If it is the first element in the row, then create a new row
+    - if (count == 0) {
+        //.row  //Temporarily commented because in tablets, three in a row makes one overflow
+    - }            
+        // Add the item           
+        .col-sm-6.col-md-4#custom-itemGrid
+            .thumbnail
+                img.img-responsive.img-rounded.custom_thumbnail_image(src=item.imageURL, alt='...')
+                .caption
+                    b Item ID: 
+                    | #{item.itemID}
+                    br
+                    b Title: 
+                    | #{item.title}
+                    br
+                    b Author: 
+                    | #{item.author}
+                    br
+                    b Edition: 
+                    | #{item.edition}
+                    br
+                    b Publisher: 
+                    | #{item.publisher}
+                    br
+                    b ISBN: 
+                    | #{item.isbn}
+                    br
+                    b Market Price: 
+                    | $#{item.marketPrice}
+                    br
+                    br
+                    b Available at: 
+                    | #{item.schoolName}
+                    br
+                    b Seller: 
+                    | #{item.sellerFirstName} #{item.sellerMiddleName} #{item.sellerLastName} 
+                    br
+                    br
+                    button.btn.btn-default.showDetailsButton Buy for $#{item.listedPrice}
+    // Increase count to keep track of number of items in the row    
+    - count++;
+    //Resetting counter to move to the next row
+    - if (count == 3) {
+        - count = 0;
+    - }
+.row
+hr
