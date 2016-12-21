@@ -23,9 +23,19 @@ router.get('/searchresults', function(req, res, next) {
     var searchFor = req.query.searchFor;
     console.log("Searching in DB for: " + searchFor);
     
-    dbRequests.getMatchingItemsInfoForThumbnail(searchFor, function (items) { //Search for an empty string so that all the available books can be seen
+    dbRequests.getMatchingItemsInfoForThumbnail(searchFor, function (items) { 
         //console.log(items);
         res.render('shelves', { items : items });
+    });
+});
+
+/* GET search suggestions */
+router.get('/searchsuggestions', function(req, res, next) {
+    var searchFor = req.query.searchFor;
+    
+    dbRequests.getMatchingItemsInfoForThumbnail(searchFor, function (items) { 
+        //console.log(items);
+        res.send({ items : items });
     });
 });
 
