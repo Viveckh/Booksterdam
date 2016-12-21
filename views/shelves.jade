@@ -11,39 +11,46 @@ each item in items
     - }            
         // Add the item           
         .col-sm-6.col-md-4#custom-itemGrid
-            .thumbnail
-                img.img-responsive.img-rounded.custom_thumbnail_image(src=item.imageURL, alt='...')
-                .caption
-                    b Item ID: 
-                    | #{item.itemID}
-                    br
-                    b Title: 
-                    | #{item.title}
-                    br
-                    b Author: 
-                    | #{item.author}
-                    br
-                    b Edition: 
-                    | #{item.edition}
-                    br
-                    b Publisher: 
-                    | #{item.publisher}
-                    br
-                    b ISBN: 
-                    | #{item.isbn}
-                    br
-                    b Market Price: 
-                    | $#{item.marketPrice}
-                    br
-                    br
-                    b Available at: 
-                    | #{item.schoolName}
-                    br
-                    b Seller: 
-                    | #{item.sellerFirstName} #{item.sellerMiddleName} #{item.sellerLastName} 
-                    br
-                    br
-                    button.btn.btn-default.showDetailsButton Buy for $#{item.listedPrice}
+            .custom-shelf-item
+                .thumbnail
+                    img.img-responsive.img-rounded.custom-thumbnail-image(src=item.imageURL, alt='...')
+                    .caption
+                        b Item ID: 
+                        | #{item.itemID}
+                        br
+                        b Title: 
+                        | #{item.title}
+                        br
+                        b Author: 
+                        | #{item.author}
+                        br
+                        b Edition: 
+                        | #{item.edition}
+                        br
+                        b Publisher: 
+                        | #{item.publisher}
+                        br
+                        b ISBN: 
+                        | #{item.isbn}
+                        br
+                        b Market Price: 
+                        | $#{item.marketPrice}
+                        br
+                        br
+                        b Available at: 
+                        | #{item.schoolName}
+                        br
+                        b Seller: 
+                        | #{item.sellerFirstName} #{item.sellerMiddleName} #{item.sellerLastName} 
+                        br
+                        br
+                        b Buy for $#{item.listedPrice}
+
+                //Content to overlay during hovering
+                .custom-overlay-div
+                    .custom-overlay-text #{item.title}
+                    .custom-overlay-btn.button.btn.btn-default.showDetailsButton Buy for $#{item.listedPrice}
+
     // Increase count to keep track of number of items in the row    
     - count++;
     //Resetting counter to move to the next row
