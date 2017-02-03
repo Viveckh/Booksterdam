@@ -39,5 +39,10 @@ router.get('/searchsuggestions', function(req, res, next) {
     });
 });
 
+/* Renders signup page */
+/* GET home page. */
+router.get('/signup', function(req, res, next) {
+    res.render('signup');
+});
 
 module.exports = router;

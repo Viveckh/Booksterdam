@@ -81,4 +81,8 @@ $(document).ready(function() {
                 });
         } 
     });
+
+    $('#custom-signupBtn').on('click', function() {
+        window.location.href='/signup';
+    });
 });
