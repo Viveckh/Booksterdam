@@ -45,4 +45,9 @@ router.get('/signup', function(req, res, next) {
     res.render('signup');
 });
 
+router.post('/register', function(req, res, next) {
+    console.log(req.body);
+    res.send("We got it bro!");
+});
+
 module.exports = router;
