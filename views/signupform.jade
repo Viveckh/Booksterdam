@@ -52,6 +52,7 @@ form#signup
                 .form-group
                     label(for='userState') State
                     select#userState.form-control(name='userState')
+                        option  
                         option AK
                         option AL
                         option AR
@@ -106,7 +107,7 @@ form#signup
             .col-sm-6.col-md-3#custom-itemGrid
                 .form-group
                     label(for='userCountry') Country
-                    input#userCountry.form-control(name='userCountry', type='text', disabled, value='United States of America')
+                    input#userCountry.form-control(name='userCountry', type='text', readonly, value='United States of America')
         
         .row
             .col-sm-6.col-md-4#custom-itemGrid
@@ -115,7 +116,6 @@ form#signup
                     select(name='userSchool', required='')#userSchool.form-control 
                         option
                         option Ramapo College of New Jersey
-                        option Other
             .col-sm-6.col-md-2#custom-itemGrid
                 .form-group
                     label(for='userPhone') *Phone

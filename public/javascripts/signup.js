@@ -6,12 +6,27 @@ $(document).ready(function() {
     $('#signup').validate({
         rules: {
             userEmail: "required",
-            userPassword: "required",
-            userConfirmPassword: "required",
-            userFname: "required",
-            userLname: "required",
+            userPassword: {
+                required: true,
+                minlength: 5
+            },
+            userConfirmPassword: {
+                equalTo: "#userPassword"
+            },
+            userFname: {
+                required: true,
+                minlength: 2
+            },
+            userLname: {
+                required: true,
+                minlength: 2
+            },
             userSchool: "required",
-            userPhone: "required",
+            userPhone: {
+                required: true,
+                minlength: 10,
+                maxlength: 10
+            },
             agreeToTerms: "required"
         },
         messages: {
@@ -37,22 +52,4 @@ $(document).ready(function() {
             return false;
         }
     });
-/*
-    $('#signup').submit(function() {
-        if ($('#signup').valid()) {
-            window.location.href='/';
-        }
-        //$('#signup').hide();
-    }); */
 });
-
-/*
-$('#signupSubmit').on('click', function() {
-    if ($('#signupSubmit').valid()) {
-        console.log("valid form");
-    }
-    else {
-        console.log("invalid form");
-    }
-});
-*/

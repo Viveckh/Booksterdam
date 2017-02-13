@@ -46,7 +46,7 @@ router.get('/signup', function(req, res, next) {
 });
 
 router.post('/register', function(req, res, next) {
-    console.log(req.body);
+    console.log(req.body.userEmail);
     res.send("We got it bro!");
 });
 
