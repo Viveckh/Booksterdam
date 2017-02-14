@@ -46,8 +46,12 @@ router.get('/signup', function(req, res, next) {
 });
 
 router.post('/register', function(req, res, next) {
-    console.log(req.body.userEmail);
-    res.send("We got it bro!");
+    //console.log(req.body);
+    var registrationInfo = req.body;
+    dbRequests.registerAUser(registrationInfo, function (result) {
+        //console.log(result);
+        res.send(result);
+    });
 });
 
 module.exports = router;

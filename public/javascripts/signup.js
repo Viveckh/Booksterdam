@@ -8,7 +8,8 @@ $(document).ready(function() {
             userEmail: "required",
             userPassword: {
                 required: true,
-                minlength: 5
+                minlength: 5,
+                maxlength: 30
             },
             userConfirmPassword: {
                 equalTo: "#userPassword"
@@ -21,6 +22,17 @@ $(document).ready(function() {
                 required: true,
                 minlength: 2
             },
+            userCity: {
+                required: true,
+                minlength: 2
+            },
+            userZip: {
+                required: true,
+                minlength: 5,
+                maxlength: 5
+            },
+            userState: "required",
+            userCountry: "required",
             userSchool: "required",
             userPhone: {
                 required: true,
@@ -35,8 +47,11 @@ $(document).ready(function() {
             userConfirmPassword: "Woah, password mismatch.",
             userFname: "Please enter your first name.",
             userLname: "Please enter your last name.",
+            userCity: "Invalid city",
+            userZip: "Invalid ZipCode",
+            userState: "Required",
             userSchool: "We really need to know your school.",
-            userPhone: "Do you mind if I asked for yo numbah?",
+            userPhone: "What's yo numbah?",
             agreeToTerms: "Required "
         },
         submitHandler: function(form) {

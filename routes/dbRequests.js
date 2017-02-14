@@ -1,4 +1,5 @@
 var sql = require("mssql");
+var bcrypt = require("bcryptjs");
 var database = require('./database');
 
 var Request = sql.Request;
@@ -131,6 +132,68 @@ var dbRequester = module.exports = {
                 //Calling the callback function here with the returned data after the request is successful
                 callback(items);
             });
-    }
+    },
 
+    //Registers a user on the db based on the given credentials. Returns error message if issues with provided data
+    registerAUser: function(registrationInfo, callback) {
+        //Load all the user provided input into the userInfo object.
+        //Not necessary to do this, but doing it to ensure the backend doesn't get affected by changes on the front end field names
+        var userInfo = {};
+        userInfo.email = registrationInfo.userEmail;
+        userInfo.password = registrationInfo.userPassword;
+        userInfo.firstName = registrationInfo.userFname;
+        userInfo.middleName = registrationInfo.userMname;
+        userInfo.lastName = registrationInfo.userLname;
+        userInfo.street = registrationInfo.userStreet;
+        userInfo.city = registrationInfo.userCity;
+        userInfo.zip = registrationInfo.userZip;
+        userInfo.state = registrationInfo.userState;
+        userInfo.country = registrationInfo.userCountry;
+        userInfo.school = registrationInfo.userSchool;
+        userInfo.phone = registrationInfo.userPhone;
+        console.log(userInfo);
+
+        //Check if any of the required fields are null, return an error message if that is the case
+        if (userInfo.email && userInfo.password && userInfo.firstName && userInfo.lastName && userInfo.city && userInfo.zip && userInfo.state && userInfo.country && userInfo.phone) {
+            console.log("Valid for db input");
+
+            //Create a request object
+            request = new Request(connection);
+            // Generate a hash and store the user info in the database
+            bcrypt.genSalt(10, function(err, salt) {
+                bcrypt.hash(userInfo.password, salt, function(err, hash) {
+                    //Parameterizing input to prevent from SQL injection
+                    request.input('email', sql.VarChar, userInfo.email);
+                    request.input('password', sql.VarChar, hash);
+                    request.input('lastName', sql.VarChar, userInfo.lastName);
+                    request.input('middleName', sql.VarChar, userInfo.middleName);
+                    request.input('firstName', sql.VarChar, userInfo.firstName);
+                    request.input('street', sql.VarChar, userInfo.street);
+                    request.input('city', sql.VarChar, userInfo.city);
+                    request.input('zipCode', sql.Int, userInfo.zip);
+                    request.input('stateName', sql.VarChar, userInfo.state);
+                    request.input('country', sql.VarChar, userInfo.country);
+                    request.input('phone', sql.Int, userInfo.phone);
+
+                    //request.output('returnValue', sql.Int);
+                    request.execute('RegisterAUser', function(err, recordsets, result) {
+                        if (err) {
+                            console.log(err);
+                        }
+                        //console.log("ReturnValue: " + request.parameters.returnValue.value);
+                        console.log("Result: " + result);
+                    });
+                });
+            });
+
+        }
+        else {
+            console.log("Invalid for db input");
+        }
+        // Now verify that the required fields aren't empty, and then register user to DB
+        //String with output msg
+        var outputMsg = '';
+
+        callback(outputMsg);
+    }
 }

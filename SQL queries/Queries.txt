@@ -23,6 +23,12 @@ CREATE TABLE  CustomerRecords
 	CONSTRAINT pk_CustID PRIMARY KEY (customerID));
 
 
+CREATE TABLE LoginCredentials
+	(email VARCHAR(50) NOT NULL,
+	hashedPassword VARCHAR(60) NOT NULL,
+	CONSTRAINT pk_Email PRIMARY KEY (email));
+
+
 CREATE TABLE SchoolRecords
 	(schoolID INT IDENTITY(5000, 1),
 	schoolName VARCHAR(200) NOT NULL,
