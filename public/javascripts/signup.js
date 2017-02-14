@@ -60,9 +60,16 @@ $(document).ready(function() {
                 url: '/register',
                 data: $(form).serialize()
             })
-                .done(function (gottie) {
-                    console.log(gottie);
-                    $(form).hide();
+                .done(function (msg) {
+                    console.log(msg);
+                    if (msg == "success") {
+                        $(form).hide();
+                        $("#alertbox").html("Registration Successful! You can login to your account now.");
+                    }
+                    else {
+                        $("#alertbox").html(msg);
+                        window.scrollTo(0, 0);
+                    }
                 });
             return false;
         }

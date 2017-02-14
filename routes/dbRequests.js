@@ -136,6 +136,9 @@ var dbRequester = module.exports = {
 
     //Registers a user on the db based on the given credentials. Returns error message if issues with provided data
     registerAUser: function(registrationInfo, callback) {
+        //String with output msg
+        var outputMsg = '';
+
         //Load all the user provided input into the userInfo object.
         //Not necessary to do this, but doing it to ensure the backend doesn't get affected by changes on the front end field names
         var userInfo = {};
@@ -155,7 +158,6 @@ var dbRequester = module.exports = {
 
         //Check if any of the required fields are null, return an error message if that is the case
         if (userInfo.email && userInfo.password && userInfo.firstName && userInfo.lastName && userInfo.city && userInfo.zip && userInfo.state && userInfo.country && userInfo.phone) {
-            console.log("Valid for db input");
 
             //Create a request object
             request = new Request(connection);
@@ -176,24 +178,32 @@ var dbRequester = module.exports = {
                     request.input('phone', sql.Int, userInfo.phone);
 
                     //request.output('returnValue', sql.Int);
+                    // Return value is 1 for success, 2 for already used email, 3 for write to DB error
                     request.execute('RegisterAUser', function(err, recordsets, result) {
                         if (err) {
                             console.log(err);
+                            outputMsg = "ALERT: Database Connection error. Please try again!"
                         }
                         //console.log("ReturnValue: " + request.parameters.returnValue.value);
                         console.log("Result: " + result);
+                        if (result == 1) {
+                            outputMsg = "success";
+                        }
+                        if (result == 2) {
+                            outputMsg = "ALERT: An account already exists with the given email!"
+                        }
+                        if (result == 3) {
+                            outputMsg = "ALERT: Internal server error during registration. Please try again!"
+                        }
+                        callback(outputMsg);
                     });
                 });
             });
 
         }
         else {
-            console.log("Invalid for db input");
+            outputMsg = "ALERT: Improper/Missing fields. Please try again!";
+            callback(outputMsg);
         }
-        // Now verify that the required fields aren't empty, and then register user to DB
-        //String with output msg
-        var outputMsg = '';
-
-        callback(outputMsg);
     }
 }
