@@ -54,4 +54,14 @@ router.post('/register', function(req, res, next) {
     });
 });
 
+router.post('/login', function(req, res, next) {
+    console.log(req.body);
+    var loginInfo = req.body;
+    res.send("success");
+    //dbRequests.registerAUser(registrationInfo, function (result) {
+        //console.log(result);
+        //res.send(result);
+    //});
+});
+
 module.exports = router;

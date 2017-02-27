@@ -85,4 +85,34 @@ $(document).ready(function() {
     $('#custom-signupBtn').on('click', function() {
         window.location.href='/signup';
     });
+
+    // Set login form validation rules using the Jquery validation plugin
+    $('#loginForm').validate({
+        rules: {
+            loginEmail: "required",
+            loginPassword: "required"
+        },
+        messages: {
+            loginEmail: "Required",
+            loginPassword: "Required"
+        },
+        submitHandler: function(form) {
+            $.ajax({
+                type: 'POST',
+                url: '/login',
+                data: $(form).serialize()
+            })
+                .done(function (msg) {
+                    console.log(msg);
+                    if (msg == "success") {
+                        //Redirect to the customer portal
+                    }
+                    else {
+
+                    }
+                });
+            return false;
+        }
+    });
+
 });
