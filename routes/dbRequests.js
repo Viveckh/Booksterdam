@@ -205,5 +205,66 @@ var dbRequester = module.exports = {
             outputMsg = "ALERT: Improper/Missing fields. Please try again!";
             callback(outputMsg);
         }
+    },
+
+    //Attempts a login, and returns the user customerID if successful
+    attemptLogin: function(loginInfo, callback) {
+        //String with output msg
+        var outputMsg = '';
+        var customerID = ''; //identifier for the user if login is successful
+
+        //Load all the user provided input into the loginCred object.
+        //Not necessary to do this, but doing it to ensure the backend doesn't get affected by changes on the front end field names
+        var loginCred = {};
+        loginCred.email = loginInfo.loginEmail;
+        loginCred.password = loginInfo.loginPassword;
+
+        //Check if any of the required fields are null, return an error message if that is the case
+        if (loginCred.email && loginCred.password) {
+            //Create a request object
+            request = new Request(connection);
+
+            //Retrieve the hash from the DB and compare if it matches the entered password; returns NULL if email isn't registered
+            //Parameterizing input to prevent from SQL injection
+            request.input('email', sql.VarChar, loginCred.email);
+            request.output('password', sql.VarChar(60));
+            request.execute('FetchHashedPassword', function(err, recordsets, result) {
+                if (err) {
+                    console.log(err);
+                    outputMsg = "connection error";
+                    callback(outputMsg, customerID);
+                }
+                var retrievedPassword = request.parameters.password.value;
+                //If password retrieved is not NULL, go ahead with authentication. Else it's a failure.
+                if (retrievedPassword) {
+                    //Compare the entered password with the retrieved password
+                    bcrypt.compare(loginCred.password, retrievedPassword, function(err, res) {
+                        if (res === true) {
+                            outputMsg = "success";
+
+                            //Retrieve the customerID and send it back for session use.    
+                            request.input('email', sql.VarChar, loginCred.email);
+                            var queryForRequest = "SELECT customerID FROM CustomerRecords WHERE email = @email;";
+                            request.query(queryForRequest, function(err, recordset) {
+                                customerID = recordset[0].customerID;
+                                callback(outputMsg, customerID);
+                            });
+                        }
+                        else {
+                            outputMsg = "incorrect password";
+                            callback(outputMsg, customerID);
+                        }
+                    });     
+                }
+                else {
+                    outputMsg = 'email not registered';
+                    callback(outputMsg, customerID);
+                }
+            });
+        }
+        else {
+            outputMsg = "improper fields";
+            callback(outputMsg, customerID);
+        }
     }
 }

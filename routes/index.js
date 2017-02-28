@@ -54,14 +54,14 @@ router.post('/register', function(req, res, next) {
     });
 });
 
+//Attempts to Login, and returns the status to the caller. Also retrieves the customer reference ID if login successful for session use
 router.post('/login', function(req, res, next) {
-    console.log(req.body);
+    //console.log(req.body);
     var loginInfo = req.body;
-    res.send("success");
-    //dbRequests.registerAUser(registrationInfo, function (result) {
-        //console.log(result);
-        //res.send(result);
-    //});
+    dbRequests.attemptLogin(loginInfo, function (result, referenceID) {
+        //console.log(result + " " + referenceID);
+        res.send(result);
+    });
 });
 
 module.exports = router;
