@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var dbRequests = require('./dbRequests');
+var sayson;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -45,6 +46,21 @@ router.get('/signup', function(req, res, next) {
     res.render('signup');
 });
 
+// Get dashboard page on login
+router.get('/dashboard', function(req, res, next) {
+    console.log(req.session);
+    //var sess = req.session;
+    //sess.user = "Vivek";
+    //sess.password = "Password";
+    //console.log(sess.user + sess.password);
+    //console.log(sayson);
+    req.session.store.get(sayson, function(error, session) {
+        console.log(session);
+    });
+    res.render('dashboard');
+});
+
+//Registers a user when provided with the signup form fields
 router.post('/register', function(req, res, next) {
     //console.log(req.body);
     var registrationInfo = req.body;
@@ -60,7 +76,16 @@ router.post('/login', function(req, res, next) {
     var loginInfo = req.body;
     dbRequests.attemptLogin(loginInfo, function (result, referenceID) {
         //console.log(result + " " + referenceID);
-        res.send(result);
+        if (result == 'success') {
+            sayson = req.session.id;
+            console.log(sayson);
+            req.session.user = req.body.loginEmail;
+            //req.session.resave();
+            //res.redirect('/dashboard');
+        }
+        else {
+            res.send(result);
+        }
     });
 });
 
