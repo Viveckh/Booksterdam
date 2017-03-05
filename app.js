@@ -5,6 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+var redisStore = require('connect-redis')(session);
 
 //Including Database related modules
 var database = require('./routes/database');
@@ -28,11 +29,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 //Initializing session
 app.use(session({
   secret: 'SupWitchyouGirl',
-  resave: false,
+  //store: new redisStore(),
+  resave: true,
   saveUninitialized: true,
   cookie: { secure: true, maxAge: 60 * 60 * 1000}
 }));
 
+//
 app.use('/', index);
 //app.use('/users', users);
 

@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var dbRequests = require('./dbRequests');
-var sayson;
+var sayson = {};
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -46,18 +46,28 @@ router.get('/signup', function(req, res, next) {
     res.render('signup');
 });
 
+function authenticate(req, res) {
+    console.log(req.user);
+    if (req.user) {
+        next();
+    }
+    else {
+        res.render('signup');
+    }
+}
+
+
 // Get dashboard page on login
 router.get('/dashboard', function(req, res, next) {
-    console.log(req.session);
-    //var sess = req.session;
-    //sess.user = "Vivek";
-    //sess.password = "Password";
-    //console.log(sess.user + sess.password);
-    //console.log(sayson);
-    req.session.store.get(sayson, function(error, session) {
-        console.log(session);
-    });
-    res.render('dashboard');
+    //console.log("Inside Dashboard:" + sayson.id);
+    //console.log(req.session);
+    
+    if ((sayson.isLoggedIn != undefined) && (sayson.isLoggedIn == true)) {
+        res.render('dashboard', {sessionInfo: sayson});  
+    }
+    else {
+        res.render('signup');
+    }
 });
 
 //Registers a user when provided with the signup form fields
@@ -77,9 +87,14 @@ router.post('/login', function(req, res, next) {
     dbRequests.attemptLogin(loginInfo, function (result, referenceID) {
         //console.log(result + " " + referenceID);
         if (result == 'success') {
-            sayson = req.session.id;
-            console.log(sayson);
+            console.log(req.session.id);
             req.session.user = req.body.loginEmail;
+            req.session.isLoggedIn = true;
+            console.log(req.session);
+            sayson = req.session;
+            res.send({redirect: '/dashboard'});
+            //req.session.save();
+            
             //req.session.resave();
             //res.redirect('/dashboard');
         }

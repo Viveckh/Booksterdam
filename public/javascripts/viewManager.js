@@ -102,14 +102,17 @@ $(document).ready(function() {
                 url: '/login',
                 data: $(form).serialize()
             })
-                .done(function (msg) {
-                    console.log(msg);
-                    if (msg == "success") {
-                        //Redirect to the customer portal
+                .done(function (response) {
+                    console.log(response);
+                    //If the response is an object with a redirect key, do the redirection, it means it's a success
+                    if (typeof response.redirect == 'string') {
+                        window.location = response.redirect;
                     }
+                    //Else login was a fail, so clear the form
                     else {
-
+                        $('#loginForm').trigger("reset");
                     }
+                    
                 });
             return false;
         }
