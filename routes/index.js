@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 
 var dbRequests = require('./dbRequests');
-var sayson = {isLoggedIn: false};
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -14,8 +13,7 @@ router.get('/', function(req, res, next) {
         //console.log(data['100000001'].firstName);
         dbRequests.getMatchingItemsInfoForThumbnail('', function (items) { //Search for an empty string so that all the available books can be seen
             //console.log(items);
-            sessionInfo = sayson;
-            res.render('index', { customers: customers, items : items, sessionInfo: sayson });
+            res.render('index', { customers: customers, items : items, sessionInfo: req.session });
         });
     });
 });
@@ -41,39 +39,32 @@ router.get('/searchsuggestions', function(req, res, next) {
     });
 });
 
-/* Renders signup page */
-/* GET home page. */
-router.get('/signup', function(req, res, next) {
-    if ((sayson.isLoggedIn != undefined) && (sayson.isLoggedIn == true)) {
-        res.render('dashboard', {sessionInfo: sayson});  
-    }
-    else {
-        res.render('signup');
-    }
-});
-
-function authenticate(req, res) {
-    console.log(req.user);
-    if (req.user) {
+//Checks if a logged in session exists.
+function authenticate(req, res, next) {
+    //If no user is logged in, render the home page, else continue
+    if (!req.session.user) {
+        res.redirect('/');
+    } else {
         next();
-    }
-    else {
-        res.render('signup');
     }
 }
 
-
-// Get dashboard page on login
-router.get('/dashboard', function(req, res, next) {
-    //console.log("Inside Dashboard:" + sayson.id);
-    //console.log(req.session);
-    
-    if ((sayson.isLoggedIn != undefined) && (sayson.isLoggedIn == true)) {
-        res.render('dashboard', {sessionInfo: sayson});  
-    }
-    else {
+/* Renders signup page */
+/* GET home page. */
+router.get('/signup', function(req, res, next) {
+    //Display the signup only if no user is logged in
+    if (!req.session.user) {
         res.render('signup');
     }
+    else {
+        res.render('dashboard', {sessionInfo: req.session});
+    }
+});
+
+// Get dashboard page
+router.get('/dashboard', authenticate, function(req, res, next) {
+    console.log("Inside Dashboard: " + req.session.user);
+    res.render('dashboard', {sessionInfo: req.session});
 });
 
 //Registers a user when provided with the signup form fields
@@ -93,16 +84,10 @@ router.post('/login', function(req, res, next) {
     dbRequests.attemptLogin(loginInfo, function (result, referenceID) {
         //console.log(result + " " + referenceID);
         if (result == 'success') {
-            console.log(req.session.id);
+            //Setting cookies with session info
             req.session.user = req.body.loginEmail;
-            req.session.isLoggedIn = true;
-            console.log(req.session);
-            sayson = req.session;
+            //console.log(req.session);
             res.send({redirect: '/dashboard'});
-            //req.session.save();
-            
-            //req.session.resave();
-            //res.redirect('/dashboard');
         }
         else {
             res.send(result);
@@ -113,7 +98,7 @@ router.post('/login', function(req, res, next) {
 //Logout
 router.post('/logout', function(req, res, next) {
     //clear the saved user
-    sayson = {isLoggedIn: false};
+    req.session.reset();
     //redirect to home
     res.send({redirect: '/'});
 });

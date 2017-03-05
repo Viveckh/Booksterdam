@@ -12,7 +12,7 @@ block content
                 a.navbar-brand(href='#') Booksterdam
             #navbar.navbar-collapse.collapse
                 //If logged in, display mini dash, else display the login form
-                - if (sessionInfo.isLoggedIn) {
+                - if (sessionInfo.user) {
                     include miniDash
                 - }
                 - else {

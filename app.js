@@ -4,8 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var session = require('express-session');
-var redisStore = require('connect-redis')(session);
+var session = require('client-sessions');
 
 //Including Database related modules
 var database = require('./routes/database');
@@ -28,16 +27,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //Initializing session
 app.use(session({
-  secret: 'SupWitchyouGirl',
-  //store: new redisStore(),
-  resave: true,
-  saveUninitialized: true,
-  cookie: { secure: true, maxAge: 60 * 60 * 1000}
+  cookieName: 'session',
+  secret: 'SupWitchYouGirl',
+  duration: 30 * 60 * 1000,
+  activeDuration: 5 * 60 * 1000,
 }));
 
 //
 app.use('/', index);
-//app.use('/users', users);
 
 // ERROR HANDLERS IN DEVELOPMENT AND PRODUCTION BELOW
 
