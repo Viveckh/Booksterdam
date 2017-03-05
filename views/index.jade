@@ -11,7 +11,13 @@ block content
                     span.icon-bar
                 a.navbar-brand(href='#') Booksterdam
             #navbar.navbar-collapse.collapse
-                include loginform
+                //If logged in, display mini dash, else display the login form
+                - if (sessionInfo.isLoggedIn) {
+                    include miniDash
+                - }
+                - else {
+                    include loginform
+                - }
 
     .container   
         .page-header

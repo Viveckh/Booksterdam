@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var dbRequests = require('./dbRequests');
-var sayson = {};
+var sayson = {isLoggedIn: false};
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -14,7 +14,8 @@ router.get('/', function(req, res, next) {
         //console.log(data['100000001'].firstName);
         dbRequests.getMatchingItemsInfoForThumbnail('', function (items) { //Search for an empty string so that all the available books can be seen
             //console.log(items);
-            res.render('index', { customers: customers, items : items });
+            sessionInfo = sayson;
+            res.render('index', { customers: customers, items : items, sessionInfo: sayson });
         });
     });
 });
@@ -43,7 +44,12 @@ router.get('/searchsuggestions', function(req, res, next) {
 /* Renders signup page */
 /* GET home page. */
 router.get('/signup', function(req, res, next) {
-    res.render('signup');
+    if ((sayson.isLoggedIn != undefined) && (sayson.isLoggedIn == true)) {
+        res.render('dashboard', {sessionInfo: sayson});  
+    }
+    else {
+        res.render('signup');
+    }
 });
 
 function authenticate(req, res) {
@@ -102,6 +108,14 @@ router.post('/login', function(req, res, next) {
             res.send(result);
         }
     });
+});
+
+//Logout
+router.post('/logout', function(req, res, next) {
+    //clear the saved user
+    sayson = {isLoggedIn: false};
+    //redirect to home
+    res.send({redirect: '/'});
 });
 
 module.exports = router;

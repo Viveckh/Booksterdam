@@ -111,6 +111,8 @@ $(document).ready(function() {
                     //Else login was a fail, so clear the form
                     else {
                         $('#loginForm').trigger("reset");
+                        //reset focus to email field
+                        $( "#loginEmail").focus();
                     }
                     
                 });
@@ -118,4 +120,18 @@ $(document).ready(function() {
         }
     });
 
+    //Logout button click
+    $('#logoutSubmit').on('click', function() {
+        $.ajax({
+                type: 'POST',
+                url: '/logout',
+            })
+                .done(function (response) {
+                    console.log(response);
+                    //If the response is an object with a redirect key, do the redirection, it means it's a success
+                    if (typeof response.redirect == 'string') {
+                        window.location = response.redirect;
+                    }                    
+                });
+    });
 });
