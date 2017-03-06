@@ -19,7 +19,9 @@ $(document).ready(function () {
         clearActiveNavBar();
         
         $(this).addClass('active');
-        $('#'+listID).slideDown('slow');
+        $('#'+listID).slideDown('slow', function() {
+            $('.custom-dash-block').matchHeight();
+        });
         
     });
     

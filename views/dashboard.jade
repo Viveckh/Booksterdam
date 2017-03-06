@@ -35,7 +35,7 @@ block content
         // It holds the first and the client column of the page
         .contents#custom-itemGrid
             #clientInfo.col-md-3.col-sm-12.custom-dash-block
-                h3 #{sessionInfo.user}
+                h3 ID: #{sessionInfo.refID}
                 img(src="http://thumbs.dreamstime.com/x/funny-nerdy-guy-21496289.jpg", width = 230, height=250)
                 p Name:
                     // Put all of the user info from the database here
@@ -51,8 +51,7 @@ block content
                     p This is where we show people's orders and stuffs                
 
                 #postings.jumbotron
-                    h2 Ola, Como Estas!
-                    p This is where to show what user wants to sell and stuffs
+                    include dash-postings
 
                 #addItem
                     .input-group
@@ -65,7 +64,7 @@ block content
             include users
         
         // Website Footer
-        footer
+        footer.navbar.navbar-fixed-bottom
             p.pull-right
                 a(href='http://www.viveckh.com') Developed by Viveckh
             p

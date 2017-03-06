@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+--QUERIES TO GET ALL THE CONTENT OF THE LOGGED IN USER FOR THE DASHBOARD
+-------------------------------------------------------------------------------
+SELECT sr.itemID AS itemID, br.ISBN AS ISBN, br.title AS title, br.edition AS edition, br.author AS author, br.publisher AS publisher, br.marketPrice AS marketPrice, br.imageURL AS imageURL, sr.price AS listedPrice FROM ShelvesRecords sr JOIN CustomerRecords cr ON (sr.sellerID = cr.customerID) JOIN BookRecords br ON (sr.ISBN = br.ISBN) WHERE sr.sellerID = @custID;

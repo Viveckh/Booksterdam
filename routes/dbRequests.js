@@ -134,6 +134,51 @@ var dbRequester = module.exports = {
             });
     },
 
+    // Gets the postings made by the logged in user
+    getDashboardContent: function(customerID, callback) {
+        var items = {};
+        
+        //Parameterizing input to prevent from SQL injection
+        request = new Request(connection);
+        request.input('custID', sql.Int, customerID);  //'customerID' is the parameter name, sql.Int is to tell that the input is going to be in int format
+
+        var queryForRequest = "SELECT sr.itemID AS itemID, br.ISBN AS ISBN, br.title AS title, br.edition AS edition, br.author AS author, br.publisher AS publisher, br.marketPrice AS marketPrice, br.imageURL AS imageURL, sr.price AS listedPrice FROM ShelvesRecords sr JOIN CustomerRecords cr ON (sr.sellerID = cr.customerID) JOIN BookRecords br ON (sr.ISBN = br.ISBN) WHERE sr.sellerID = @custID;"
+        
+        request.query(queryForRequest, function(err, recordset) {
+                console.log("Inside Query Request");
+
+                // If any error occurs during the request, display the error log and return;
+                if (err) {
+                    console.log("couldn't fetch the request. Error log below");
+                    console.log(err);
+                    return;
+                }
+
+                // If no errors, then, display the fetched data
+                recordset.forEach(function(column) {          
+                    //FETCHING DATA FROM DATABASE TO EXPORT
+                    var itemInfo = {};
+                    // Populating listed books info
+                    itemInfo.itemID = column.itemID;
+                    itemInfo.isbn = column.ISBN;
+                    itemInfo.title = column.title;
+                    itemInfo.edition = (column.edition == null) ? "N/A" : column.edition;
+                    itemInfo.author = (column.author == null) ? "Not Available" : column.author;
+                    itemInfo.publisher = (column.publisher == null) ? "Not Available" : column.publisher;
+                    itemInfo.imageURL = (column.imageURL == null) ? "" : column.imageURL;
+                    itemInfo.marketPrice = (column.marketPrice == null) ? "Not Available" : column.marketPrice;
+                    itemInfo.listedPrice = (column.listedPrice == null) ? "Not Provided" : column.listedPrice;
+
+                    // Adding the item to the master object
+                    items[column.itemID] =  itemInfo;
+                });
+                console.log("Request Fulfilled");
+                
+                //Calling the callback function here with the returned data after the request is successful
+                callback(items);
+            });
+    },
+
     //Registers a user on the db based on the given credentials. Returns error message if issues with provided data
     registerAUser: function(registrationInfo, callback) {
         //String with output msg

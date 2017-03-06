@@ -64,7 +64,13 @@ router.get('/signup', function(req, res, next) {
 // Get dashboard page
 router.get('/dashboard', authenticate, function(req, res, next) {
     console.log("Inside Dashboard: " + req.session.user);
-    res.render('dashboard', {sessionInfo: req.session});
+    var customerID = req.session.refID;
+
+    //Retrieve the information from the database for the logged in user
+    dbRequests.getDashboardContent(customerID, function (items) {
+        //console.log(items);
+        res.render('dashboard', {sessionInfo: req.session, items: items});
+    });
 });
 
 //Registers a user when provided with the signup form fields
@@ -85,6 +91,7 @@ router.post('/login', function(req, res, next) {
         //console.log(result + " " + referenceID);
         if (result == 'success') {
             //Setting cookies with session info
+            req.session.refID = referenceID;
             req.session.user = req.body.loginEmail;
             //console.log(req.session);
             res.send({redirect: '/dashboard'});
