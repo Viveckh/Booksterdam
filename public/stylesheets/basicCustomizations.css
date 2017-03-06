@@ -1,10 +1,11 @@
-#custom-navBar {
-    background-color: #2B2B2B;
-}
-
 /*To compensate for the extra padding done in jumbotron.css*/
 body {
     padding-top: 20px;
+    font-family: 'Quantico', sans-serif;
+}
+
+#custom-navBar {
+    background-color: #2B2B2B;
     font-family: 'Quantico', sans-serif;
 }
 

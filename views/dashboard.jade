@@ -1,5 +1,8 @@
 extends layout
 
+block scripts
+    script(type='text/javascript', src='./javascripts/dashboard.js')
+
 block content
     nav.navbar.navbar-inverse.navbar-fixed-top#custom-navBar
         .container
@@ -12,15 +15,50 @@ block content
                 a.navbar-brand(href='/') Booksterdam
             #navbar.navbar-collapse.collapse
                 include miniDash
+                ul.nav.navbar-nav
+                        li.active
+                            a(href="#") Profile
+                                span.sr-only (current)
+                        li(data-id="orders")
+                            a(href="#") Orders
+                        li(data-id="postings")
+                            a(href="#") My postings
+                        li(data-id='addItem')
+                            a(href="#") List a Book
 
-    .container   
+    .container
         .page-header
             div
-                h1 Your Dashboard
+                h2 Your Dashboard      
         
-        h1 Seems like we have a visitor, FINALLY! #{sessionInfo.user}
-        p.lead We're currently under construction, just like Trump's Executive Board.
-        hr
+        // Starts the main content of the page
+        // It holds the first and the client column of the page
+        .contents#custom-itemGrid
+            #clientInfo.col-md-3.col-sm-12.custom-dash-block
+                h3 #{sessionInfo.user}
+                img(src="http://thumbs.dreamstime.com/x/funny-nerdy-guy-21496289.jpg", width = 230, height=250)
+                p Name:
+                    // Put all of the user info from the database here
+                    span#name Beans and Ducks
+                p Class:
+                    span#class Year of modulo
+
+
+            // It holds the rest of the width putting all of the clients requests
+            #generatedClientRequest.col-md-9.col-sm-12.custom-dash-block
+                #orders.jumbotron
+                    h2 Your orders, your highess!
+                    p This is where we show people's orders and stuffs                
+
+                #postings.jumbotron
+                    h2 Ola, Como Estas!
+                    p This is where to show what user wants to sell and stuffs
+
+                #addItem
+                    .input-group
+                        input.form-control(type='text',placeholder="Search", aria-describedby='basic-addon2')
+                        span.input-group-btn
+                            button.btn.btn-default#searchButton search
 
         // Displaying customers Listing
         //.section#custom-customers
