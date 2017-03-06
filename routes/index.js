@@ -57,7 +57,7 @@ router.get('/signup', function(req, res, next) {
         res.render('signup');
     }
     else {
-        res.render('dashboard', {sessionInfo: req.session});
+        res.redirect('/dashboard');
     }
 });
 
