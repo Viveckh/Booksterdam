@@ -7,14 +7,9 @@ var dbRequests = require('./dbRequests');
 router.get('/', function(req, res, next) {
     
     //Proper way of executing a database request from the dbRequests.js
-    dbRequests.retrieveCustomerRecords(function (customers) {
-        //Do stuffs with the retrieved data here
-        //console.log(customers);
-        //console.log(data['100000001'].firstName);
-        dbRequests.getMatchingItemsInfoForThumbnail('', function (items) { //Search for an empty string so that all the available books can be seen
-            //console.log(items);
-            res.render('index', { customers: customers, items : items, sessionInfo: req.session });
-        });
+    dbRequests.getMatchingItemsInfoForThumbnail('', function (items) { //Search for an empty string so that all the available books can be seen
+        //console.log(items);
+        res.render('index', { items : items, sessionInfo: req.session });
     });
 });
 
@@ -67,9 +62,18 @@ router.get('/dashboard', authenticate, function(req, res, next) {
     var customerID = req.session.refID;
 
     //Retrieve the information from the database for the logged in user
-    dbRequests.getDashboardContent(customerID, function (items) {
-        //console.log(items);
-        res.render('dashboard', {sessionInfo: req.session, items: items});
+    dbRequests.retrieveCustomerRecord(customerID, function(customerInfo){ 
+        dbRequests.getDashboardContent(customerID, function (items) {
+            //console.log(items);
+            res.render('dashboard', {sessionInfo: req.session, customerInfo: customerInfo, items: items});
+        });
+    });
+});
+
+router.get('/dash-postings', authenticate, function(req, res, next) {
+    var customerID = req.session.refID;
+    dbRequests.getDashboardContent(customerID, function(items) {
+        res.render('dash-postings', {sessionInfo: req.session, items: items});
     });
 });
 
@@ -77,7 +81,7 @@ router.get('/dashboard', authenticate, function(req, res, next) {
 router.post('/addToShelf', authenticate, function(req, res, next) {
     var customerID = req.session.refID;
     var item = req.body;
-    console.log(item);
+    //console.log(item);
     
     //Add the item to the shelf in database
     dbRequests.addToShelf(customerID, item, function (result) {

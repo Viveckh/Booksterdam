@@ -17,12 +17,17 @@ $(document).keypress(function(e) {
 
 $(document).ready(function() {
     
+    //Reload the home page from scratch everytime the brand logo is clicked
+    $('.navbar-brand').on("click", function() {
+        window.location.href='/';
+    });
+
     //Display suggestions as user types, and retrieve the books that match when the user presses enter on search bar..
     $("#custom-searchBarText").keyup(function(e){
 
         //Option 1: If user presses the Enter Key, directly display the results
         if (e.which == 13) {
-            console.log("Enter pressed");
+            //console.log("Enter pressed");
             var searchFor = $('#custom-searchBarText').val();
 
             // Make ajax call to update the view with search results
@@ -77,7 +82,6 @@ $(document).ready(function() {
                             $('#custom-searchBarText').trigger(e);
                         }
                     });
-
                 });
         } 
     });

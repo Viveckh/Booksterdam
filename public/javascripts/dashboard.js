@@ -1,4 +1,5 @@
 var isbndb_API_KEY = "U68SN2O7";
+var defaultCoverImg = 'http://d29ci68ykuu27r.cloudfront.net/images/new/no_image_available_large.gif'
 
 //To make the uneven thumbnails even in size
 $(window).load(function() {
@@ -59,6 +60,8 @@ $(document).ready(function () {
                     if (msg == "success") {
                         $('#clearInfo').trigger('click');
                         $("#alertbox").html("Item successfully added!");
+
+                        //ATTENTION: Make another ajax call to update user's listing summary page
                     }
                     else {
                         $("#alertbox").html(msg);
@@ -84,6 +87,9 @@ $(document).ready(function () {
     $('#clearInfo').on('click', function() {
         $('#itemISBN').prop("readonly", false)
         $('#posting').trigger('reset');
+        $('#itemCover img').attr("src", defaultCoverImg);
+        $('#itemCover .caption').text("");
+
         $('#autoPopulatedPostingDetails').hide(function(){
             $('.custom-dash-block').matchHeight();
         });
@@ -100,7 +106,7 @@ function populateBookInfo(param){
     var encodedBookURL = encodeURI(requestURL);
     //console.log(requestURL);
 
-    var isbn13, title, author, edition, publisher, pages, marketPrice, imageURL;
+    var isbn13, title, subtitle, author, edition, publisher, pages, marketPrice, imageURL;
 
     $.getJSON(encodedBookURL, function() {
         console.log("Parsing JSON File");
@@ -108,12 +114,20 @@ function populateBookInfo(param){
     .done(function(data) {
         if (data.items) {
             isbn13 = data.items[0].volumeInfo.industryIdentifiers[1].identifier;
-            title = data.items[0].volumeInfo.title;
+            subtitle = (data.items[0].volumeInfo.subtitle) ? (": " + data.items[0].volumeInfo.subtitle) : '';
+            title = data.items[0].volumeInfo.title + subtitle;
             author = data.items[0].volumeInfo.authors.join(", "); //Since authors is an array
             //edition = data.items[0].volumeInfo.;
             publisher = data.items[0].volumeInfo.publisher;
             pages = data.items[0].volumeInfo.pageCount;
 
+            //USE THIS IF YOU WANT TO USE GOOGLE API FOR BOOK covers
+            imageURL = data.items[0].volumeInfo.imageLinks.thumbnail;
+            $('#itemCover img').attr("src", imageURL);
+            $('#itemImageUrl').val(imageURL);
+
+            //USE THIS COMMENTED SECTION IF YOU CHOOSE TO USE OPENLIBRARY FOR COVER no_image_available_large
+            /*
             // Image URL is retrieved from OpenLibrary.org
             imageURL = "http://covers.openlibrary.org/b/isbn/" + isbn13 + "-L.jpg?default=false";
             console.log(imageURL);
@@ -128,6 +142,8 @@ function populateBookInfo(param){
                 $('#itemImageUrl').val(imageURL);
                 //console.log(imageURL);
             });
+            */
+
             //Setting form fields on the page
             $('#itemCover .caption').text("ISBN-13: "+ isbn13);
 
@@ -142,10 +158,11 @@ function populateBookInfo(param){
         }
         else {
             console.log("ISBN not found");
+            $("#alertbox").html("ALERT: ISBN not found!");
         }
     })
     .fail(function(data) {
-        console.error("Couldn't parse!");
+        $("#alertbox").html("ALERT: Book Info couldn't be Auto-populated. We apologize but at this point, we don't support manual input");
     });
 }
 

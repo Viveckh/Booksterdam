@@ -6,12 +6,13 @@ var Request = sql.Request;
 var connection = database.connectionPool(); //Import established connection from database.js
 
 var dbRequester = module.exports = {
-    //Retrieves the entire customer Records; user can overload the callback function if there is anything they want done with the returned data
-    retrieveCustomerRecords: function (callback) {
-        var customers = {};
+    //Retrieves the customer Record of the given customerID; user can overload the callback function if there is anything they want done with the returned data
+    retrieveCustomerRecord: function (customerID, callback) {
+        var customerInfo = {};
         
         request = new Request(connection);
-        request.query("Select * FROM CustomerRecords", function(err, recordset) {
+        request.input('custID', sql.Int, customerID);
+        request.query("Select * FROM CustomerRecords where customerID=@custID", function(err, recordset) {
                 console.log("Inside Query Request");
 
                 // If any error occurs during the request, display the error log and return;
@@ -20,32 +21,26 @@ var dbRequester = module.exports = {
                     console.log(err);
                     return;
                 }
-
-                // If no errors, then, display the fetched data
-                recordset.forEach(function(column) {
-                    //console.log(column);
-                    //console.log(column.lastName);
-                    //console.log(column.zipCode);
-                    
-                    //FETCHING DATA FROM DATABASE TO EXPORT
-                    var customerInfo = {};
-                    customerInfo.customerID = column.customerID;
-                    customerInfo.lastName = column.lastName;
-                    customerInfo.middleName = (column.middleName == null) ? "" : column.middleName;
-                    customerInfo.firstName = column.firstName;
-                    customerInfo.street = (column.street == null) ? "" : column.street;
-                    customerInfo.city = column.city;
-                    customerInfo.zipCode = column.zipCode;
-                    customerInfo.stateName = column.stateName;
-                    customerInfo.country = column.country;
-                    customerInfo.phone = column.phone;
-                    customerInfo.email = column.email;
-                    customers[column.customerID] =  customerInfo;
-                });
-                console.log("Request Fulfilled");
                 
+                // If no errors, then, display the fetched data
+                //FETCHING DATA FROM DATABASE TO EXPORT
+                if (recordset[0]) {
+                    customerInfo.customerID = recordset[0].customerID;
+                    customerInfo.lastName = recordset[0].lastName;
+                    customerInfo.middleName = (recordset[0].middleName == null) ? "" : recordset[0].middleName;
+                    customerInfo.firstName = recordset[0].firstName;
+                    customerInfo.street = (recordset[0].street == null) ? "" : recordset[0].street;
+                    customerInfo.city = recordset[0].city;
+                    customerInfo.zipCode = recordset[0].zipCode;
+                    customerInfo.stateName = recordset[0].stateName;
+                    customerInfo.country = recordset[0].country;
+                    customerInfo.phone = recordset[0].phone;
+                    customerInfo.email = recordset[0].email;
+                    console.log("Request Fulfilled");
+                }
+
                 //Calling the callback function here with the returned data after the request is successful
-                callback(customers);
+                callback(customerInfo);
             });
     },
 
@@ -76,7 +71,7 @@ var dbRequester = module.exports = {
                     items[column.itemID] =  itemInfo;
                 });
                 console.log("Request Fulfilled");
-                
+            
                 //Calling the callback function here with the returned data after the request is successful
                 callback(items);
             });
@@ -91,7 +86,7 @@ var dbRequester = module.exports = {
         request = new Request(connection);
         request.input('find', sql.VarChar, '%' + strToFind + '%');  //'find' is the parameter name, sql.VarChar is to tell that the input is going to be in var format, and the third parameter is the string to search with wildcards appended
 
-        var queryForRequest = "SELECT sr.itemID AS itemID, br.ISBN AS ISBN, br.title AS title, br.edition AS edition, br.author AS author, br.publisher AS publisher, br.marketPrice AS marketPrice, br.imageURL AS imageURL, scr.schoolName AS schoolName, cr.lastName AS sellerLastName, cr.middleName AS sellerMiddleName, cr.firstName AS sellerFirstName, sr.price AS listedPrice FROM ShelvesRecords sr JOIN CustomerRecords cr ON (sr.sellerID = cr.customerID) JOIN BookRecords br ON (sr.ISBN = br.ISBN) JOIN SchoolRecords scr ON (sr.schoolID = scr.schoolID) WHERE (br.ISBN LIKE @find) OR (br.title LIKE @find) OR (br.author LIKE @find) OR (br.publisher LIKE @find) OR (scr.schoolName LIKE @find);"
+        var queryForRequest = "SELECT sr.itemID AS itemID, br.ISBN AS ISBN, br.title AS title, br.edition AS edition, br.author AS author, br.publisher AS publisher, br.marketPrice AS marketPrice, br.imageURL AS imageURL, scr.schoolName AS schoolName, cr.lastName AS sellerLastName, cr.middleName AS sellerMiddleName, cr.firstName AS sellerFirstName, cr.email AS sellerEmail, sr.price AS listedPrice FROM ShelvesRecords sr JOIN CustomerRecords cr ON (sr.sellerID = cr.customerID) JOIN BookRecords br ON (sr.ISBN = br.ISBN) JOIN SchoolRecords scr ON (sr.schoolID = scr.schoolID) WHERE (br.ISBN LIKE @find) OR (br.title LIKE @find) OR (br.author LIKE @find) OR (br.publisher LIKE @find) OR (scr.schoolName LIKE @find) ORDER BY itemID DESC;"
         
         request.query(queryForRequest, function(err, recordset) {
                 console.log("Inside Query Request");
@@ -102,7 +97,7 @@ var dbRequester = module.exports = {
                     console.log(err);
                     return;
                 }
-
+                
                 // If no errors, then, display the fetched data
                 recordset.forEach(function(column) {          
                     //FETCHING DATA FROM DATABASE TO EXPORT
@@ -123,12 +118,12 @@ var dbRequester = module.exports = {
                     itemInfo.sellerLastName = column.sellerLastName;
                     itemInfo.sellerMiddleName = (column.sellerMiddleName == null) ? "" : column.sellerMiddleName;
                     itemInfo.sellerFirstName = column.sellerFirstName;
+                    itemInfo.sellerEmail = column.sellerEmail;
                     
                     // Adding the item to the master object
                     items[column.itemID] =  itemInfo;
                 });
                 console.log("Request Fulfilled");
-                
                 //Calling the callback function here with the returned data after the request is successful
                 callback(items);
             });
@@ -142,7 +137,8 @@ var dbRequester = module.exports = {
         request = new Request(connection);
         request.input('custID', sql.Int, customerID);  //'customerID' is the parameter name, sql.Int is to tell that the input is going to be in int format
 
-        var queryForRequest = "SELECT sr.itemID AS itemID, br.ISBN AS ISBN, br.title AS title, br.edition AS edition, br.author AS author, br.publisher AS publisher, br.marketPrice AS marketPrice, br.imageURL AS imageURL, sr.price AS listedPrice FROM ShelvesRecords sr JOIN CustomerRecords cr ON (sr.sellerID = cr.customerID) JOIN BookRecords br ON (sr.ISBN = br.ISBN) WHERE sr.sellerID = @custID;"
+        //STEP 1: Get all the posted items by the logged in user
+        var queryForRequest = "SELECT sr.itemID AS itemID, br.ISBN AS ISBN, br.title AS title, br.edition AS edition, br.author AS author, br.publisher AS publisher, br.marketPrice AS marketPrice, br.imageURL AS imageURL, sr.price AS listedPrice FROM ShelvesRecords sr JOIN CustomerRecords cr ON (sr.sellerID = cr.customerID) JOIN BookRecords br ON (sr.ISBN = br.ISBN) WHERE sr.sellerID = @custID ORDER BY sr.itemID DESC;"
         
         request.query(queryForRequest, function(err, recordset) {
                 console.log("Inside Query Request");
@@ -172,6 +168,9 @@ var dbRequester = module.exports = {
                     // Adding the item to the master object
                     items[column.itemID] =  itemInfo;
                 });
+
+                //STEP 2: Get the customer's personal information
+                var queryForRequest = "";
                 console.log("Request Fulfilled");
                 
                 //Calling the callback function here with the returned data after the request is successful
@@ -321,9 +320,15 @@ var dbRequester = module.exports = {
         //Not loading the itemDetails gathered from form to separate variables for simplicity
         
         //Check if any of the required fields are null, return an error message if that is the case
-        if (item.itemISBN && item.itemTitle && item.itemAuthor && item.itemSellerPrice && item.itemSchool) {
+        if (customerID && item.itemISBN && item.itemTitle && item.itemAuthor && item.itemSellerPrice && item.itemSchool) {
             //create a request object
             request = new Request(connection);
+
+            //Verifying if the not-required integer fields are filled, if empty setting them to null to avoid errors
+            item.itemEdition = (item.itemEdition) ? item.itemEdition: null;
+            item.itemPages = (item.itemPages) ? item.itemPages: null;
+            item.itemMarketPrice = (item.itemMarketPrice) ? item.itemMarketPrice: null;
+            //console.log(item);
 
             request.input('school', sql.VarChar, item.itemSchool);
             request.input('sellerID', sql.Int, customerID);
@@ -344,19 +349,51 @@ var dbRequester = module.exports = {
                 if (err) {
                     console.log(err);
                     outputMsg = "ALERT: Database Connection error. Please try again!";
+                    return;
                 }
                 //Retrieve School ID
                 var schoolID = recordset[0].schoolID;
                 request.input('schoolID', sql.Int, schoolID);
 
                 //STEP 2: Insert the book info the BookRecords Table
-                //queryForRequest = "INSERT INTO BookRecords (ISBN, title, edition, author, publisher, numberOfPages, marketPrice, imageURL) VALUES (@isbn, @title, @edition, @author, @publisher, @numberOfPages, @marketPrice, @imageUrl);"
-                //request.query()
+                queryForRequest = "INSERT INTO BookRecords (ISBN, title, edition, author, publisher, numberOfPages, marketPrice, imageURL) VALUES (@isbn, @title, @edition, @author, @publisher, @numberOfPages, @marketPrice, @imageUrl);"
+                request.query(queryForRequest, function(err, recordset){
+                    if (err) {
+                        console.log(err);
+                        outputMsg = "ALERT: Database Connection error. Please try again!";
+                    }
 
-                callback(outputMsg);
-            });
+                    //If new item was added to the BookRecords
+                    if (request.rowsAffected == 1) {
+                        console.log("New Book Info added to BookRecords");
+                    }
+                    
+                    //STEP 3: Insert the item to the shelf
+                    queryForRequest = "INSERT INTO ShelvesRecords (sellerID, schoolID, ISBN, price, isAvailable) VALUES (@sellerID, @schoolID, @isbn, @price, 1);"
+                    request.query(queryForRequest, function(err, recordset){
+                        if (err) {
+                            console.log(err);
+                            outputMsg = "ALERT: Database Connection error. Please try again!";
+                            return;
+                        }
 
-            //STEP 3: Insert the item to the shelf
+                        //If the item is successfully added to the shelf
+                        if (request.rowsAffected == 1) {
+                            console.log("New item on the shelves");
+                            outputMsg = "success";
+                        }
+                        else {
+                            console.log("Item couldn't be shelved");
+                            outputMsg = "ALERT: Item couldn't be shelved. Try again!";
+                        }
+                        callback(outputMsg);
+                    });
+                });
+            });    
+        }
+        else {
+            outputMsg = "ALERT: Improper/Missing fields. Please try again!";
+            callback(outputMsg);
         }
     }
 }

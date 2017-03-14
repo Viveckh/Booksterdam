@@ -35,14 +35,23 @@ block content
         // It holds the first and the client column of the page
         .contents#custom-itemGrid
             #clientInfo.col-md-3.col-sm-12.custom-dash-block
-                h3 ID: #{sessionInfo.refID}
-                img(src="http://thumbs.dreamstime.com/x/funny-nerdy-guy-21496289.jpg", width = 230, height=250)
-                p Name:
-                    // Put all of the user info from the database here
-                    span#name Beans and Ducks
-                p Class:
-                    span#class Year of modulo
-
+                h3 Hi #{customerInfo.firstName}!
+                img(src="https://stephanieschiraldi.files.wordpress.com/2013/02/chelsee-2.jpg", width = 230, height=250)
+                // Put all of the user info from the database here
+                p Booksterdam ID:#{' '}
+                    span #{sessionInfo.refID}
+                p Street:#{' '}
+                    span #{customerInfo.street}
+                p City:#{' '}
+                    span #{customerInfo.city}
+                p State:#{' '}
+                    span #{customerInfo.stateName} 
+                p Zip:#{' '}
+                    span #{customerInfo.zipCode}
+                p Phone:#{' '}
+                    span #{customerInfo.phone}
+                p Email:#{' '}
+                    span #{customerInfo.email}
 
             // It holds the rest of the width putting all of the clients requests
             #generatedClientRequest.col-md-9.col-sm-12.custom-dash-block
@@ -51,6 +60,7 @@ block content
                     p This is where we show people's orders and stuffs                
 
                 #postings.jumbotron
+                    h4 Please refresh the page to see your latest additions!
                     include dash-postings
 
                 #addItem
