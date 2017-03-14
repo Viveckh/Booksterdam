@@ -73,6 +73,19 @@ router.get('/dashboard', authenticate, function(req, res, next) {
     });
 });
 
+// POST an item to shelf
+router.post('/addToShelf', authenticate, function(req, res, next) {
+    var customerID = req.session.refID;
+    var item = req.body;
+    console.log(item);
+    
+    //Add the item to the shelf in database
+    dbRequests.addToShelf(customerID, item, function (result) {
+        //console.log(result);
+        res.send(result);
+    });
+});
+
 //Registers a user when provided with the signup form fields
 router.post('/register', function(req, res, next) {
     //console.log(req.body);

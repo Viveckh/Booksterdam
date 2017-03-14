@@ -28,7 +28,7 @@ body {
 }
 
 /* Book listing view - grids, thumbnails, captions, etc*/
-#custom-itemGrid {
+.custom-itemGrid {
     border: 1px;
     background-color: #FDF3E7;
 }

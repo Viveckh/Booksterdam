@@ -311,5 +311,52 @@ var dbRequester = module.exports = {
             outputMsg = "improper fields";
             callback(outputMsg, customerID);
         }
+    },
+
+    //Add an item to the shelves
+    addToShelf: function(customerID, item, callback) {
+        //String with output msg
+        var outputMsg = '';
+
+        //Not loading the itemDetails gathered from form to separate variables for simplicity
+        
+        //Check if any of the required fields are null, return an error message if that is the case
+        if (item.itemISBN && item.itemTitle && item.itemAuthor && item.itemSellerPrice && item.itemSchool) {
+            //create a request object
+            request = new Request(connection);
+
+            request.input('school', sql.VarChar, item.itemSchool);
+            request.input('sellerID', sql.Int, customerID);
+            request.input('isbn', sql.BigInt, item.itemISBN);
+            request.input('title', sql.VarChar, item.itemTitle);
+            request.input('author', sql.VarChar, item.itemAuthor);
+            request.input('edition', sql.Float, item.itemEdition);
+            request.input('publisher', sql.VarChar, item.itemPublisher);
+            request.input('numberOfPages', sql.Int, item.itemPages);
+            request.input('marketPrice', sql.Float, item.itemMarketPrice);
+            request.input('price', sql.Float, item.itemSellerPrice);
+            request.input('imageUrl', sql.VarChar, item.itemImageUrl);
+            
+            //STEP 1: First get the corresponding schoolID of the selected school
+            var queryForRequest = "SELECT schoolID from SchoolRecords WHERE schoolName=@school;"
+            request.query(queryForRequest, function(err, recordset) {
+                //If any error occurs during the request. Return error
+                if (err) {
+                    console.log(err);
+                    outputMsg = "ALERT: Database Connection error. Please try again!";
+                }
+                //Retrieve School ID
+                var schoolID = recordset[0].schoolID;
+                request.input('schoolID', sql.Int, schoolID);
+
+                //STEP 2: Insert the book info the BookRecords Table
+                //queryForRequest = "INSERT INTO BookRecords (ISBN, title, edition, author, publisher, numberOfPages, marketPrice, imageURL) VALUES (@isbn, @title, @edition, @author, @publisher, @numberOfPages, @marketPrice, @imageUrl);"
+                //request.query()
+
+                callback(outputMsg);
+            });
+
+            //STEP 3: Insert the item to the shelf
+        }
     }
 }

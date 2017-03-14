@@ -1,0 +1,70 @@
+// Posting form to enter Book information. Make any necessary modifications associated with the form here.
+
+form#posting
+    //Login Information like Email and password
+    fieldset.form-group
+        legend Posting Information
+        .row
+            .col-sm-4.col-md-4.custom-itemGrid
+                .form-group
+                    label.control-label(for='itemISBN') *ISBN-13
+                    input#itemISBN.form-control(name='itemISBN', type='number', placeholder='E.g. 9783161484100', required)
+    fieldset.form-group
+                button.btn.btn-primary#populateInfo(type='button') Populate Info
+                button.btn.btn-primary#clearInfo(type='button') Clear Info
+
+    //Personal Information for record keeping
+    fieldset.form-group#autoPopulatedPostingDetails
+        .row
+            .col-sm-4.col-md-4.custom-itemGrid
+                .thumbnail#itemCover
+                    img.img-responsive.img-rounded.custom-thumbnail-image(src='http://d29ci68ykuu27r.cloudfront.net/images/new/no_image_available_large.gif', alt='...')
+                    .caption
+                    input#itemImageUrl.form-control(name='itemImageUrl', type='hidden')
+                        
+        .row
+            .col-sm-12.col-md-10.custom-itemGrid
+                .form-group
+                    label(for='itemTitle') *Title
+                    input#itemTitle.form-control(name='itemTitle', type='text', required, readonly)
+        
+        .row
+            .col-sm-4.col-md-4.custom-itemGrid
+                .form-group
+                    label(for='itemAuthor') Author
+                    input#itemAuthor.form-control(name='itemAuthor', type='text', required, readonly)
+            .col-sm-4.col-md-2.custom-itemGrid
+                .form-group
+                    label(for='itemEdition') Edition
+                    input#itemEdition.form-control(name='itemEdition', type='number', readonly)
+            .col-sm-4.col-md-4.custom-itemGrid
+                .form-group
+                    label(for='itemPublisher') Publisher
+                    input#itemPublisher.form-control(name='itemPublisher', type='text', readonly)
+        .row
+            .col-sm-4.col-md-2.custom-itemGrid
+                .form-group
+                    label(for='itemPages') Pages
+                    input#itemPages.form-control(name='itemPages', type='number', readonly)
+            .col-sm-4.col-md-2.custom-itemGrid
+                .form-group
+                    label(for='itemMarketPrice') Market Price
+                    input#itemMarketPrice.form-control(name='itemMarketPrice', type='number', readonly)
+            .col-sm-4.col-md-2.custom-itemGrid
+                .form-group
+                    label(for='itemSellerPrice') Your Price
+                    input#itemSellerPrice.form-control(name='itemSellerPrice', type='number', required)
+            .col-sm-6.col-md-4.custom-itemGrid
+                .form-group
+                    label(for='itemSchool') *School
+                    select(name='itemSchool', required='')#itemSchool.form-control
+                        option
+                        option Ramapo College of New Jersey
+
+    fieldset.form-group
+        .form-check
+            input.form-check-input#agreeToTerms(name='agreeToTerms', type='checkbox', required)
+            |       I agree to Booksterdam Terms and Conditions.
+
+    fieldset.form-group
+        button.btn.btn-primary#itemSubmit(type='submit') Submit

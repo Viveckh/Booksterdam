@@ -54,11 +54,13 @@ block content
                     include dash-postings
 
                 #addItem
-                    .input-group
+                    h5#alertbox
+                    include postingForm
+                    //.input-group
                         input.form-control(type='text',placeholder="Search", aria-describedby='basic-addon2')
                         span.input-group-btn
                             button.btn.btn-default#searchButton search
-
+    
         // Displaying customers Listing
         //.section#custom-customers
             include users
