@@ -1,0 +1,43 @@
+@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,700);
+@import url(https://fonts.googleapis.com/css?family=Titillium+Web:400,300,700);
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,300,700);
+
+
+
+
+#menu-0 .mbr-brand__name {
+  font-size: 16px;
+}
+#menu-0.mbr-navbar--stuck .mbr-navbar__section {
+  background: #475577;
+}
+#menu-0 .mbr-brand__name a {
+  font-size: 36px;
+  font-family: 'Source Sans Pro', sans-serif;
+}
+#menu-0 .mbr-navbar__items a {
+  font-size: 15px;
+}
+#footer1-6 P {
+  color: #ffffff;
+}
+#slider-4 H1 {
+  font-family: 'Titillium Web', sans-serif;
+  font-size: 60px;
+}
+#slider-4 P {
+  font-family: 'Titillium Web', sans-serif;
+  font-size: 25px;
+}
+#header2-7 H1 {
+  text-align: right;
+  color: #ffffff;
+}
+#header2-7 P {
+  text-align: right;
+  color: #ffffff;
+  font-size: 16px;
+}
+#header2-7 .btn {
+  font-family: 'Titillium Web', sans-serif;
+}

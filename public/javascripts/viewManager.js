@@ -19,7 +19,7 @@ $(document).ready(function() {
     
     //Reload the home page from scratch everytime the brand logo is clicked
     $('.navbar-brand').on("click", function() {
-        window.location.href='/';
+        window.location.href='/index';
     });
 
     //Display suggestions as user types, and retrieve the books that match when the user presses enter on search bar..

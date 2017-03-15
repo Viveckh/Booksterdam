@@ -3,8 +3,13 @@ var router = express.Router();
 
 var dbRequests = require('./dbRequests');
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
+/* GET Landing Page */
+router.get('/', function(req, res, next){
+    res.render('home');
+});
+
+/* GET Index Page. */
+router.get('/index', function(req, res, next) {
     
     //Proper way of executing a database request from the dbRequests.js
     dbRequests.getMatchingItemsInfoForThumbnail('', function (items) { //Search for an empty string so that all the available books can be seen
@@ -38,7 +43,7 @@ router.get('/searchsuggestions', function(req, res, next) {
 function authenticate(req, res, next) {
     //If no user is logged in, render the home page, else continue
     if (!req.session.user) {
-        res.redirect('/');
+        res.redirect('/index');
     } else {
         next();
     }
@@ -124,7 +129,7 @@ router.post('/logout', function(req, res, next) {
     //clear the saved user
     req.session.reset();
     //redirect to home
-    res.send({redirect: '/'});
+    res.send({redirect: '/index'});
 });
 
 module.exports = router;
